@@ -69,13 +69,49 @@ Project is created with:
 1. View menu of snacks (including pictures and prices)
 
 Request Type: GET
+
 Request Format: domain/customers/customerId/menu
-Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c7314bdb0479/menu
+
+Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c7314bdb0479/menu
+
+> Pre-populated customer IDs in the database for testing:
+
+<p align="center">
+  <img src="postman_imgs/userCustomers.png"  width="300" >
+</p>
 
 > input & output image example
 
 <p align="center">
   <img src="postman_imgs/view_menu_input&output_example.png"  width="300" >
+</p>
+
+---
+
+2. View details of a snack
+
+Request Type: GET
+
+Request Format: domain/customers/customerId/product/productId
+
+Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c7314bdb0479/product/60801147f388c7314bdb047a
+
+> Pre-populated customer IDs in the database for testing:
+
+<p align="center">
+  <img src="postman_imgs/userCustomers.png"  width="300" >
+</p>
+
+> Pre-populated product IDs in the database for testing:
+
+<p align="center">
+  <img src="postman_imgs/products.png"  width="300" >
+</p>
+
+> input & output image example
+
+<p align="center">
+  <img src="postman_imgs/view_product_details_input&output_example.png.png"  width="300" >
 </p>
 
 ## Code Implementation
