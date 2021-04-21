@@ -57,7 +57,7 @@ function validateUserVendor(user) {
 
 function validateSetLocation(user) {
   const schema = Joi.object({
-    location: Joi.string().min(3).max(255).required(),
+    location: Joi.string().max(255).required(),
     isOpen: Joi.boolean().required(),
   });
 
