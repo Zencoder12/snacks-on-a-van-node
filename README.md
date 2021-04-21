@@ -74,16 +74,16 @@ Request Format: domain/customers/customerId/menu
 
 Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c7314bdb0479/menu
 
-> Pre-populated customer IDs in the database for testing:
+> Pre-populated customer IDs in the database for testing (params):
 
 <p align="center">
-  <img src="postman_imgs/userCustomers.png"  width="300" >
+  <img src="postman_imgs/userCustomers.png"  width="600" >
 </p>
 
 > input & output image example
 
 <p align="center">
-  <img src="postman_imgs/view_menu_input&output_example.png"  width="300" >
+  <img src="postman_imgs/view_menu_input&output_example.png"  width="600" >
 </p>
 
 ---
@@ -96,13 +96,13 @@ Request Format: domain/customers/customerId/product/productId
 
 Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c7314bdb0479/product/60801147f388c7314bdb047a
 
-> Pre-populated customer IDs in the database for testing:
+> Pre-populated customer IDs in the database for testing (params):
 
 <p align="center">
   <img src="postman_imgs/userCustomers.png"  width="300" >
 </p>
 
-> Pre-populated product IDs in the database for testing:
+> Pre-populated product IDs in the database for testing (params):
 
 <p align="center">
   <img src="postman_imgs/products.png"  width="300" >
@@ -111,7 +111,41 @@ Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c
 > input & output image example
 
 <p align="center">
-  <img src="postman_imgs/view_product_details_input&output_example.png.png"  width="300" >
+  <img src="postman_imgs/view_product_details_input&output_example.png"  width="300" >
+</p>
+
+3. Customer starts a new order by requesting a snack
+
+Request Type: POST
+
+Request Format: domain/customers/customerId/new-order
+
+Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c7314bdb0479/new-order
+
+> Pre-populated customer IDs in the database for testing (params):
+
+<p align="center">
+  <img src="postman_imgs/userCustomers.png"  width="600" >
+</p>
+
+> Pre-populated vendor IDs in the database for testing (body):
+
+<p align="center">
+  <img src="postman_imgs/vendors.png"  width="600" >
+</p>
+
+> input image example
+
+<p align="center">
+  <img src="postman_imgs/new_order_input_example.png"  width="600" >
+</p>
+
+Comments: orderItems will be extracted from the browser local storage, processed by the client app and send in as the format in the image example, therefore we are not linking to product Id.
+
+> output image example
+
+<p align="center">
+  <img src="postman_imgs/new_order_output_example.png"  width="600" >
 </p>
 
 ## Code Implementation
