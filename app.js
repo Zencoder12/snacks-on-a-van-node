@@ -6,7 +6,7 @@ const app = express();
 const home = require("./routes/home");
 const mongoose = require("mongoose");
 const products = require("./routes/products");
-// const customers = require("./routes/customers");
+const userCustomers = require("./routes/userCustomers");
 // const vendors = require("./routes/vendors");
 
 mongoose
@@ -21,7 +21,7 @@ mongoose
 app.use(express.json());
 app.use("/", home);
 app.use("/products", products);
-// app.use("/customers", customers);
+app.use("/customers", userCustomers);
 // app.use("/vendors", vendors);
 
 // replacing routes try and catch block
