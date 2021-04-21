@@ -1,5 +1,5 @@
 require("express-async-errors");
-// require("./models");
+require("./models");
 const error = require("./middleware/error");
 const express = require("express");
 const app = express();
@@ -8,15 +8,6 @@ const mongoose = require("mongoose");
 const products = require("./routes/products");
 const userCustomers = require("./routes/userCustomers");
 const userVendors = require("./routes/userVendors");
-
-mongoose
-  .connect("mongodb://localhost:27017/tbfigthers", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  })
-  .then(() => console.log("Connected to MongoDB..."))
-  .catch((err) => console.error("Could not connect to MongoDB...", err));
 
 app.use(express.json());
 app.use("/", home);
