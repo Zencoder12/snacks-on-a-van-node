@@ -128,7 +128,13 @@ router.post("/:customerId/new-order", async (req, res) => {
 
   order = await order.save();
 
-  res.send(order);
+  res.send({
+    OrderId: order._id,
+    Customer: customer.firstName,
+    Vendor: vendor.vendorName,
+    Items: order.orderItems,
+    Time: order.orderTime,
+  });
 });
 
 module.exports = router;
