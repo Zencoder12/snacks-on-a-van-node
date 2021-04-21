@@ -32,7 +32,12 @@ router.post("/create-user", async (req, res) => {
 
   await user.save();
 
-  res.send(user);
+  res.send({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    phone: user.phone,
+  });
 });
 
 // ------ CUSTOMERS APP OPERATIONS ------
@@ -51,8 +56,10 @@ router.get("/:customerId/menu", async (req, res) => {
       .status(404)
       .send("The customer with the given ID was not found.");
 
-  // after all validations complete, retrieve all products registered in the database (if any)
-  const products = await Product.find();
+  // after all validations complete, retrieve all registered products in the database (if any)
+  const products = await Product.find()
+    .sort("productName")
+    .select("productName sizes prices img -_id");
 
   if (!products.length)
     return res.send("Current there are no available products.");
@@ -79,7 +86,9 @@ router.get("/:customerId/product/:productId", async (req, res) => {
       .send("The customer with the given ID was not found.");
 
   // check whether productID exists in the database. If exists, return it to the client
-  const product = await Product.findById(req.params.productId);
+  const product = await Product.findById(req.params.productId).select(
+    "productName sizes prices img -_id"
+  );
   if (!product)
     return res.status(404).send("The product with the given ID was not found.");
 

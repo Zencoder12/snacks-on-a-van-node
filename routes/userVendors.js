@@ -29,7 +29,11 @@ router.post("/create-user", async (req, res) => {
 
   await user.save();
 
-  res.send(user);
+  res.send({
+    vendorName: user.vendorName,
+    email: user.email,
+    phone: user.phone,
+  });
 });
 
 // ------ VENDOR APP OPERATIONS ------
@@ -61,7 +65,11 @@ router.patch("/:vendorId/set-location/", async (req, res) => {
   if (!vendor)
     return res.status(404).send("The vendor with the given ID was not found.");
 
-  res.send(vendor);
+  res.send({
+    vendor: vendor.vendorName,
+    location: vendor.location,
+    isOpen: vendor.isOpen,
+  });
 });
 
 // ROUTE TO GET OUTSTANDING ORDERS
@@ -81,7 +89,9 @@ router.get("/:vendorId/outstanding-orders/", async (req, res) => {
   const orders = await Order.find({
     vendor: req.params.vendorId,
     isFulfilled: false,
-  });
+  })
+    .populate("customer", "firstName lastName phone -_id")
+    .select("customer orderItems");
 
   if (!orders.length)
     return res.status(404).send("There are no outstanding orders.");
@@ -123,7 +133,10 @@ router.patch("/:vendorId/:orderId/set-fulfill", async (req, res) => {
   if (!order)
     return res.status(400).send("The order with the given ID was not found.");
 
-  res.send(order);
+  res.send({
+    orderId: order._id,
+    isFulfilled: order.isFulfilled,
+  });
 });
 
 // ROUTE TO GET ALL ORDERS

@@ -25,7 +25,7 @@ app.use("/customers", userCustomers);
 app.use("/vendors", userVendors);
 
 // replaces routes try and catch block
-// app.use(error);
+app.use(error);
 
 process.on("uncaughtException", (ex) => {
   console.log("WE GOT AN UNCAUGHT EXCEPTION");

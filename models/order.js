@@ -5,12 +5,12 @@ Joi.objectId = require("joi-objectid")(Joi);
 const orderSchema = new mongoose.Schema({
   customer: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "Customer",
+    ref: "User_customer",
     required: true,
   },
   vendor: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "Vendor",
+    ref: "User_vendor",
     required: true,
   },
   orderItems: {
