@@ -25,7 +25,7 @@ Remember that _"this document"_ can use `different formats` to **highlight** imp
 ## Team Members
 
 | Name | Student ID | Task | State |
-| :---         |     :---:      |     :---:      |          ---: |
+| :---         |     :---:      |     :---:      |     :---:      |
 | Felipe Leefu Huang Lin | 1202652 | Front End & Back End      |  Working |
 | Jiajing Zhou           | 1067985 | Front End & Back End      |  Working |
 | Wenqian Zhou           | 1067812 | Front End & Back End      |  Working |
