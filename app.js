@@ -7,7 +7,7 @@ const home = require("./routes/home");
 const mongoose = require("mongoose");
 const products = require("./routes/products");
 const userCustomers = require("./routes/userCustomers");
-// const vendors = require("./routes/vendors");
+const userVendors = require("./routes/userVendors");
 
 mongoose
   .connect("mongodb://localhost:27017/tbfigthers", {
@@ -22,9 +22,9 @@ app.use(express.json());
 app.use("/", home);
 app.use("/products", products);
 app.use("/customers", userCustomers);
-// app.use("/vendors", vendors);
+app.use("/vendors", userVendors);
 
-// replacing routes try and catch block
+// replaces routes try and catch block
 // app.use(error);
 
 process.on("uncaughtException", (ex) => {

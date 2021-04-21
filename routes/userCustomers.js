@@ -4,7 +4,7 @@ const {
 } = require("../models/userCustomer");
 const { Order, validateOrder } = require("../models/order");
 const { Product } = require("../models/product");
-// const { UserVendor } = require("../models/userVendor");
+const { UserVendor } = require("../models/userVendor");
 const mongoose = require("mongoose");
 const express = require("express");
 
