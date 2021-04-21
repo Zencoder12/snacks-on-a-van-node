@@ -1,0 +1,32 @@
+{
+  "name": "project-t13-thebaldfighters",
+  "version": "1.0.0",
+  "description": "**The University of Melbourne** # INFO30005 – Web Information Technologies",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INFO30005-2021-SM1/project-t13-thebaldfighters.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/INFO30005-2021-SM1/project-t13-thebaldfighters/issues"
+  },
+  "homepage": "https://github.com/INFO30005-2021-SM1/project-t13-thebaldfighters#readme",
+  "dependencies": {
+    "config": "^3.3.6",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "joi": "^17.4.0",
+    "joi-objectid": "^3.0.1",
+    "mongoose": "^5.12.5"
+  },
+  "devDependencies": {
+    "jshint": "^2.12.0"
+  }
+}
