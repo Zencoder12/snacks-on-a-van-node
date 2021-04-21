@@ -24,11 +24,13 @@ Remember that _"this document"_ can use `different formats` to **highlight** imp
 
 ## Team Members
 
-| Name | Task | State |
-| :---         |     :---:      |          ---: |
-| Student Name 1  | Back End     |  Done |
-| Student Name 2    | Front End      |  Testing |
-| Student Name 3    | README Format      |  Amazing! |
+| Name | Student ID | Task | State |
+| :---         |     :---:      |     :---:      |          ---: |
+| Felipe Leefu Huang Lin | 1202652 | Front End & Back End      |  Working |
+| Jiajing Zhou           | 1067985 | Front End & Back End      |  Working |
+| Wenqian Zhou           | 1067812 | Front End & Back End      |  Working |
+| Yueting Zhang          | 1084806 | UI Mock Up & Front End    |  Working |
+| Shenlan Bei            | 957661  | UI Mock Up & Back End     |  Working |
 
 ## General info
 This is project ...
