@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 const home = require("./routes/home");
 const mongoose = require("mongoose");
-// const products = require("./routes/products");
+const products = require("./routes/products");
 // const customers = require("./routes/customers");
 // const vendors = require("./routes/vendors");
 
@@ -20,12 +20,12 @@ mongoose
 
 app.use(express.json());
 app.use("/", home);
-// app.use("/products", products);
+app.use("/products", products);
 // app.use("/customers", customers);
 // app.use("/vendors", vendors);
 
 // replacing routes try and catch block
-app.use(error);
+// app.use(error);
 
 process.on("uncaughtException", (ex) => {
   console.log("WE GOT AN UNCAUGHT EXCEPTION");
