@@ -114,6 +114,8 @@ Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c
   <img src="postman_imgs/view_product_details_input&output_example.png"  width="300" >
 </p>
 
+---
+
 3. Customer starts a new order by requesting a snack
 
 Request Type: POST
@@ -140,12 +142,40 @@ Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c
   <img src="postman_imgs/new_order_input_example.png"  width="600" >
 </p>
 
-Comments: orderItems will be extracted from the browser local storage, processed by the client app and send in as the format in the image example, therefore we are not linking to product Id.
+Comments: orderItems will be extracted from the browser local storage, processed by the client app and send in as the format in the image example, therefore we are not linking to the productId.
 
 > output image example
 
 <p align="center">
   <img src="postman_imgs/new_order_output_example.png"  width="600" >
+</p>
+
+---
+
+4. Setting van status (vendor sends location, marks van as ready-for-orders)
+
+Request Type: PATCH
+
+Request Format: domain/vendors/vendorId/set-location
+
+Request Example: https://the-bald-figthers.herokuapp.com/vendors/608017b3f388c7314bdb0483/set-location
+
+> Pre-populated vendor IDs in the database for testing (params):
+
+<p align="center">
+  <img src="postman_imgs/vendors.png"  width="600" >
+</p>
+
+> input image example
+
+<p align="center">
+  <img src="postman_imgs/set_location_input_example.png"  width="600" >
+</p>
+
+> output image example
+
+<p align="center">
+  <img src="postman_imgs/set_location_output_example.png"  width="600" >
 </p>
 
 ## Code Implementation
