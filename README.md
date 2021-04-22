@@ -99,19 +99,19 @@ Request Example: https://the-bald-figthers.herokuapp.com/customers/607ff864f388c
 > Pre-populated customer IDs in the database for testing (params):
 
 <p align="center">
-  <img src="postman_imgs/userCustomers.png"  width="300" >
+  <img src="postman_imgs/userCustomers.png"  width="600" >
 </p>
 
 > Pre-populated product IDs in the database for testing (params):
 
 <p align="center">
-  <img src="postman_imgs/products.png"  width="300" >
+  <img src="postman_imgs/products.png"  width="600" >
 </p>
 
 > input & output image example
 
 <p align="center">
-  <img src="postman_imgs/view_product_details_input&output_example.png"  width="300" >
+  <img src="postman_imgs/view_product_details_input&output_example.png"  width="600" >
 </p>
 
 ---
@@ -176,6 +176,44 @@ Request Example: https://the-bald-figthers.herokuapp.com/vendors/608017b3f388c73
 
 <p align="center">
   <img src="postman_imgs/set_location_output_example.png"  width="600" >
+</p>
+
+---
+
+5. Show list of all outstanding orders
+
+Request Type: GET
+
+Request Format: domain/vendors/vendorId/outstanding-orders
+
+Request Example: https://the-bald-figthers.herokuapp.com/vendors/608018b9f388c7314bdb0484/outstanding-orders
+
+> Pre-populated vendor IDs in the database for testing (params):
+
+<p align="center">
+  <img src="postman_imgs/vendors.png"  width="600" >
+</p>
+
+> Pre-populated order IDs in the database for testing:
+
+<p align="center">
+  <img src="postman_imgs/order_1.png"  width="600" >
+</p>
+<p align="center">
+  <img src="postman_imgs/order_2.png"  width="600" >
+</p>
+
+> input image example
+
+<p align="center">
+  <img src="postman_imgs/outstanding_orders_input_example.png"  width="600" >
+</p>
+
+> output image example
+
+<p align="center">
+  <img src="postman_imgs/outstanding_orders_output
+  _example.png"  width="600" >
 </p>
 
 ## Code Implementation
