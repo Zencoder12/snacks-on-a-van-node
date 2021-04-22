@@ -40,7 +40,12 @@ Remember that _"this document"_ can use `different formats` to **highlight** imp
 
 2. COMMIT ID:
 
-3. GENERAL ASSUMPTIONS:
+3. ATLAS ACCESS:
+
+- username: fleefuhuangl@student.unimelb.edu.au
+- password: info3005
+
+4. GENERAL ASSUMPTIONS:
 
 a. For each route, we have implemented some validation on the object send in the body of the request. We are also validating mongoose ID objects to avoid incurring in rejected promises.
 
@@ -251,59 +256,3 @@ Request Example: https://the-bald-figthers.herokuapp.com/vendors/608018b9f388c73
 <p align="center">
   <img src="postman_imgs/setfulfilled_output_example.png"  width="600" >
 </p>
-
-## Code Implementation
-
-You can include a code snippet here.
-
-```HTML
-<!--
-Example code from: https://www.w3schools.com/jsref/met_win_alert.asp
-__>
-
-<!DOCTYPE html>
-<html>
-<body>
-
-<p>Click the button to display an alert box.</p>
-
-<button onclick="myFunction()">Try it</button>
-
-<script>
-function myFunction() {
-  alert("Hello! I am an alert box!");
-}
-</script>
-
-</body>
-</html>
-```
-
-## Adding Images
-
-You can use images/gif hosted online:
-
-<p align="center">
-  <img src="https://github.com/Martin-Reinoso/sandpit-Profile/raw/main/Images_Readme/01.gif"  width="300" >
-</p>
-
-Or you can add your own images from a folder in your repo with the following code. The example has a folder `Gifs` with an image file `Q1-1.gif`:
-
-```HTML
-<p align="center">
-  <img src="Gifs/Q1-1.gif"  width="300" >
-</p>
-```
-
-To create a gif from a video you can follow this [link](https://ezgif.com/video-to-gif/ezgif-6-55f4b3b086d4.mov).
-
-You can use emojis :+1: but do not over use it, we are looking for professional work. If you would not add them in your job, do not use them here! :shipit:
-
-**Now Get ready to complete all the tasks:**
-
-- [x] Read the Project handouts carefully
-- [x] User Interface (UI)mockup
-- [ ] App server mockup
-- [ ] Front-end + back-end (one feature)
-- [ ] Complete system + source code
-- [ ] Report on your work(+ test1 feature)
