@@ -197,10 +197,10 @@ Request Example: https://the-bald-figthers.herokuapp.com/vendors/608018b9f388c73
 > Pre-populated order IDs in the database for testing:
 
 <p align="center">
-  <img src="postman_imgs/order_1.png"  width="600" >
+  <img src="postman_imgs/orders_1.png"  width="600" >
 </p>
 <p align="center">
-  <img src="postman_imgs/order_2.png"  width="600" >
+  <img src="postman_imgs/orders_2.png"  width="600" >
 </p>
 
 > input image example
@@ -212,8 +212,44 @@ Request Example: https://the-bald-figthers.herokuapp.com/vendors/608018b9f388c73
 > output image example
 
 <p align="center">
-  <img src="postman_imgs/outstanding_orders_output
-  _example.png"  width="600" >
+  <img src="postman_imgs/outstanding_orders_output_example.png"  width="600" >
+</p>
+
+---
+
+6. Mark an order as "fulfilled" (ready to be picked up by customer)
+
+Request Type: PATCH
+
+Request Format: domain/vendors/vendorId/orderId/set-fulfill
+
+Request Example: https://the-bald-figthers.herokuapp.com/vendors/608018b9f388c7314bdb0484/60801ed2cb86ee00151e5f9c/set-fulfill
+
+> Pre-populated vendor IDs in the database for testing (params):
+
+<p align="center">
+  <img src="postman_imgs/vendors.png"  width="600" >
+</p>
+
+> Pre-populated order IDs in the database for testing (params):
+
+<p align="center">
+  <img src="postman_imgs/orders_1.png"  width="600" >
+</p>
+<p align="center">
+  <img src="postman_imgs/orders_2.png"  width="600" >
+</p>
+
+> input image example
+
+<p align="center">
+  <img src="postman_imgs/setfulfilled_input_example.png"  width="600" >
+</p>
+
+> output image example
+
+<p align="center">
+  <img src="postman_imgs/setfulfilled_output_example.png"  width="600" >
 </p>
 
 ## Code Implementation
