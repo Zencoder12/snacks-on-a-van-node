@@ -49,7 +49,7 @@ Remember that _"this document"_ can use `different formats` to **highlight** imp
 
 a. For each route, we have implemented some validation on the object send in the body of the request. We are also validating mongoose ID objects to avoid incurring in rejected promises.
 
-b. Error handlings - The routes are not wrapped in try and catch block because we are using THE npm module express-async-errors to handle that. Also, to handle rejected promises not related to express and uncaught errors we are using a custom error middleware coupled together with the process object error handling method.
+b. Error handlings - The routes are not wrapped in try and catch block because we are using the npm module express-async-errors to handle that. Also, to handle rejected promises not related to express and uncaught errors we are using a custom error middleware coupled together with the process object error handling method.
 
 c. We are assuming that in the final version of the app, customer ID and vendor ID will be extracted from the JSON web token for added security. However, because up to this point the authorization functionality is not yet implemented, we are passing the customer ID and vendor ID information through the URL paths as a parameter to assist in the queries.
 

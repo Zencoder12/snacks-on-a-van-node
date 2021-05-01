@@ -1,10 +1,11 @@
 require("express-async-errors");
 require("./models");
+require("./middleware/logging")();
+const winston = require("winston");
 const error = require("./middleware/error");
 const express = require("express");
 const app = express();
 const home = require("./routes/home");
-const mongoose = require("mongoose");
 const products = require("./routes/products");
 const userCustomers = require("./routes/userCustomers");
 const userVendors = require("./routes/userVendors");
@@ -18,15 +19,5 @@ app.use("/vendors", userVendors);
 // replaces routes try and catch block
 app.use(error);
 
-process.on("uncaughtException", (ex) => {
-  console.log("WE GOT AN UNCAUGHT EXCEPTION");
-  process.exit(1);
-});
-
-process.on("unhandledRejection", (ex) => {
-  console.log("WE GOT AN UNHANDLED REJECTION");
-  process.exit(1);
-});
-
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+app.listen(port, () => winston.info(`Listening on port ${port}...`));
