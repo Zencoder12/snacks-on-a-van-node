@@ -7,8 +7,9 @@ const { Product } = require("../models/product");
 const { UserVendor } = require("../models/userVendor");
 const mongoose = require("mongoose");
 const express = require("express");
-
 const router = express.Router();
+const bcrypt = require("bcrypt");
+const authToken = require("../middleware/authToken");
 
 // ROUTE TO CREATE CUSTOMER USER
 
@@ -30,9 +31,13 @@ router.post("/create-user", async (req, res) => {
     phone: req.body.phone,
   });
 
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+
   await user.save();
 
-  res.send({
+  const token = user.generateAuthToken();
+  res.header("x-auth-token", token).send({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
@@ -97,17 +102,14 @@ router.get("/:customerId/product/:productId", async (req, res) => {
 
 // ROUTE FOR CUSTOMER TO START A NEW ORDER
 
-router.post("/:customerId/new-order", async (req, res) => {
-  // check whether path URL customerID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.customerId))
-    return res.status(404).send("Not a valid customer Id.");
-
+// authToken middleware check if a valid jwt was provided
+router.post("/new-order", authToken, async (req, res) => {
   // validate req.body object
   const { error } = validateOrder(req.body);
   if (error) return res.status(404).send(error.details[0].message);
 
   // check whether customerID exists in the database
-  const customer = await UserCustomer.findById(req.params.customerId);
+  const customer = await UserCustomer.findById(req.user._id);
   if (!customer)
     return res
       .status(404)
