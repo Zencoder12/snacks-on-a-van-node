@@ -31,11 +31,13 @@ router.post("/create-user", async (req, res) => {
     phone: req.body.phone,
   });
 
+  /* hash the password before storing in the database */
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
 
   await user.save();
 
+  /* generate jwt token and send through the header */
   const token = user.generateAuthToken();
   res.header("x-auth-token", token).send({
     firstName: user.firstName,
