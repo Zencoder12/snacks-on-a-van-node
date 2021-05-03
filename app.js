@@ -18,8 +18,8 @@ if (!config.get("jwtPrivateKey")) {
   process.exit(1);
 }
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 app.use("/", home);
 app.use("/products", products);
 app.use("/customers", userCustomers);
