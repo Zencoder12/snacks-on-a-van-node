@@ -39,12 +39,15 @@ router.post("/create-user", async (req, res) => {
 
   /* generate jwt token and send through the header */
   const token = user.generateAuthToken();
-  res.header("x-auth-token", token).send({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    phone: user.phone,
-  });
+  res
+    .header("x-auth-token", token)
+    .header("access-control-expose-headers", "x-auth-token")
+    .send({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+    });
 });
 
 // ------ CUSTOMERS APP OPERATIONS ------
