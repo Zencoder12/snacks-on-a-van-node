@@ -37,6 +37,7 @@ router.post("/", async (req, res) => {
     productName: req.body.productName,
     sizes: req.body.sizes,
     prices: req.body.prices,
+    category: req.body.category,
     img: req.body.img,
   });
 
@@ -60,7 +61,8 @@ router.put("/:id", async (req, res) => {
         productName: req.body.productName,
         sizes: req.body.sizes,
         prices: req.body.prices,
-        color: req.body.img,
+        category: req.body.category,
+        img: req.body.img,
       },
     },
     { new: true }

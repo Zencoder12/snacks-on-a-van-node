@@ -54,19 +54,7 @@ router.post("/create-user", async (req, res) => {
 
 // ROUTE TO GET VIEW MENU OF SNACKS
 
-router.get("/:customerId/menu", async (req, res) => {
-  // check whether path URL customerID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.customerId))
-    return res.status(404).send("Not a valid customer Id.");
-
-  // check whether customerID exists in the database
-  const customer = await UserCustomer.findById(req.params.customerId);
-  if (!customer)
-    return res
-      .status(404)
-      .send("The customer with the given ID was not found.");
-
-  // after all validations complete, retrieve all registered products in the database (if any)
+router.get("/products", async (req, res) => {
   const products = await Product.find()
     .sort("productName")
     .select("productName sizes prices img -_id");

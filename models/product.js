@@ -26,6 +26,12 @@ const productSchema = new mongoose.Schema({
     message: "A product should have at least one price",
     required: true,
   },
+  category: {
+    minlength: 5,
+    maxlength: 32,
+    type: String,
+    required: true,
+  },
   img: {
     type: String,
     minlength: 5,
@@ -41,6 +47,7 @@ function validateProduct(product) {
     productName: Joi.string().min(3).max(32).required(),
     sizes: Joi.array().items(Joi.string()).min(1).max(50).required(),
     prices: Joi.array().items(Joi.number()).min(1).max(50).required(),
+    category: Joi.string().min(5).max(32).required(),
     img: Joi.string().min(5).max(255).required(),
   });
 
