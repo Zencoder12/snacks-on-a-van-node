@@ -55,9 +55,7 @@ router.post("/create-user", async (req, res) => {
 // ROUTE TO GET VIEW MENU OF SNACKS
 
 router.get("/products", async (req, res) => {
-  const products = await Product.find()
-    .sort("productName")
-    .select("productName sizes prices img -_id");
+  const products = await Product.find();
 
   if (!products.length)
     return res.send("Current there are no available products.");
@@ -67,26 +65,14 @@ router.get("/products", async (req, res) => {
 
 // ROUTE TO GET VIEW DETAILS OF SNACK
 
-router.get("/:customerId/product/:productId", async (req, res) => {
-  // check whether path URL customerID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.customerId))
-    return res.status(404).send("Not a valid customer Id.");
-
+router.get("/product/:productId", async (req, res) => {
   // check whether path URL productID is a valid mongo DB id object
   if (!mongoose.Types.ObjectId.isValid(req.params.productId))
     return res.status(404).send("Not a valid product Id.");
 
-  // check whether customerID exists in the database
-  const customer = await UserCustomer.findById(req.params.customerId);
-  if (!customer)
-    return res
-      .status(404)
-      .send("The customer with the given ID was not found.");
-
   // check whether productID exists in the database. If exists, return it to the client
-  const product = await Product.findById(req.params.productId).select(
-    "productName sizes prices img -_id"
-  );
+  const product = await Product.findById(req.params.productId);
+
   if (!product)
     return res.status(404).send("The product with the given ID was not found.");
 
