@@ -118,4 +118,27 @@ router.post("/new-order", authToken, async (req, res) => {
   });
 });
 
+// ROUTE FOR CUSTOMER TO GET ALL ORDERS
+
+router.get("/orders/", authToken, async (req, res) => {
+  // check whether customerID exists in the database
+  const customer = await UserCustomer.findById(req.user._id);
+  if (!customer)
+    return res
+      .status(404)
+      .send("The customer with the given ID was not found.");
+
+  // retrieve all customer's orders
+  const orders = await Order.find({
+    customer: customer,
+  })
+    .populate("customer", "firstName lastName phone -_id")
+    .select("orderItems -_id -customer");
+
+  if (!orders.length)
+    return res.status(404).send("There are no outstanding orders.");
+
+  res.send(orders);
+});
+
 module.exports = router;
