@@ -284,7 +284,7 @@ Unfortunately the group didn't had enough time before the deadline passed to imp
 Please see the picture below.
 
 <p align="center">
-  <img src="deliverable_3_get_orders_backend.png"  width="600" >
+  <img src="postman_imgs/deliverable_3_get_orders_backend.png"  width="600" >
 </p>
 
 For that a "x-auth-token" header with a jwtoken must be provided. Below is a dummy token which can be used.
