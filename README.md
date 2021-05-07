@@ -256,3 +256,50 @@ Request Example: https://the-bald-figthers.herokuapp.com/vendors/608018b9f388c73
 <p align="center">
   <img src="postman_imgs/setfulfilled_output_example.png"  width="600" >
 </p>
+
+## DELIVERABLE 3 INFORMATION
+
+1. Login Details
+
+There are 2 ways to login to the application. Create a new user on the Register table. After creating the user you will be automatically be logged in and redirected to the menu page.
+
+The second option is to use the already created profile with the below information:
+USERNAME: Lionelm@barcelonafc.com
+PASSWORD: 1234melbourne
+
+---
+
+2. Order Snacks
+
+If the users is not logged the user is redirected to an error page. To be able to confirm the order the user must be logged in.
+
+Because the vendor information is not implemented and to create an order the route must receive a vendor ID to continue with the request we have hard coded the vendorID in the client send request.
+
+VendorID: 608018b9f388c7314bdb0484
+
+3. Order Details
+
+Unfortunately the group didn't had enough time before the deadline passed to implement the order display completely. However the connection with the backend is working in case the teaching team wants to test.
+
+Please see the picture below.
+
+<p align="center">
+  <img src="deliverable_3_get_orders_backend.png"  width="600" >
+</p>
+
+For that a "x-auth-token" header with a jwtoken must be provided. Below is a dummy token which can be used.
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDk1MzE5MjI2ZGU5ODAwMTUyNTNhY2QiLCJmaXJzdE5hbWUiOiJMaW9uZWwiLCJlbWFpbCI6Ikxpb25lbG1AYmFyY2Vsb25hZmMuY29tIiwiaWF0IjoxNjIwMzkzMjM5fQ.BI83MyXuch0k5hrtGZvY-lSI4Sy0AxPPxWRKijGq6AY
+
+4. URL
+
+front-end: https://secure-badlands-10230.herokuapp.com/
+back-end: https://the-bald-figthers.herokuapp.com/
+
+5. REPOS
+
+front-end: https://github.com/INFO30005-2021-SM1/project-frontend-t13-thebaldfighters
+comitID: 598c15080ed9a09ab729d6b0f0740cfcf43908db
+
+back-end: https://github.com/INFO30005-2021-SM1/project-t13-thebaldfighters
+commitID: f2a3b91647079e43bfb648dec11112cc1bbd44bf
