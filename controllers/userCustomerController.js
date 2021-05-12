@@ -1,26 +1,25 @@
+const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
 const {
   UserCustomer,
   validateUserCustomer,
 } = require("../models/userCustomer");
-const { Order, validateOrder } = require("../models/order");
 const { Product } = require("../models/product");
 const { UserVendor } = require("../models/userVendor");
-const mongoose = require("mongoose");
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const authToken = require("../middleware/authToken");
+const { Order, validateOrder } = require("../models/order");
 
-// ROUTE TO CREATE CUSTOMER USER
-
-router.post("/create-user", async (req, res) => {
+// CREATE A CUSTOMER USER
+const createUser = async (req, res) => {
   // validate req.body object
   const { error } = validateUserCustomer(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   // check whether the provided email already exists in the database
   let user = await UserCustomer.findOne({ email: req.body.email });
-  if (user) return res.status(400).send("User already registered.");
+  if (user)
+    return res
+      .status(400)
+      .send("User already registered. Please use another email.");
 
   // after performed all validations, create new customer and save
   user = new UserCustomer({
@@ -48,41 +47,35 @@ router.post("/create-user", async (req, res) => {
       email: user.email,
       phone: user.phone,
     });
-});
+};
 
-// ------ CUSTOMERS APP OPERATIONS ------
-
-// ROUTE TO GET VIEW MENU OF SNACKS
-
-router.get("/products", async (req, res) => {
-  const products = await Product.find();
+// GET ALL PRODUCTS IN THE MENU
+const displayMenu = async (req, res) => {
+  const products = await Product.find().lean();
 
   if (!products.length)
     return res.send("Current there are no available products.");
 
   res.send(products);
-});
+};
 
-// ROUTE TO GET VIEW DETAILS OF SNACK
-
-router.get("/product/:productId", async (req, res) => {
+// GET VIEW DETAILS OF A SNACK
+const getOneProduct = async (req, res) => {
   // check whether path URL productID is a valid mongo DB id object
   if (!mongoose.Types.ObjectId.isValid(req.params.productId))
     return res.status(404).send("Not a valid product Id.");
 
   // check whether productID exists in the database. If exists, return it to the client
-  const product = await Product.findById(req.params.productId);
+  const product = await Product.findById(req.params.productId).lean();
 
   if (!product)
     return res.status(404).send("The product with the given ID was not found.");
 
   res.send(product);
-});
+};
 
 // ROUTE FOR CUSTOMER TO START A NEW ORDER
-
-// authToken middleware check if a valid jwt was provided
-router.post("/new-order", authToken, async (req, res) => {
+const createOrder = async (req, res) => {
   // validate req.body object
   const { error } = validateOrder(req.body);
   if (error) return res.status(404).send(error.details[0].message);
@@ -99,8 +92,7 @@ router.post("/new-order", authToken, async (req, res) => {
   if (!vendor)
     return res.status(404).send("The vendor with the given ID was not found.");
 
-  // orderItems are assumed to come from the shopping cart (information stored in the browser local storage)
-  // create new order and return to the client
+  // after all validations, create new order and return to the client
   let order = new Order({
     customer: customer._id,
     vendor: vendor._id,
@@ -116,11 +108,10 @@ router.post("/new-order", authToken, async (req, res) => {
     Items: order.orderItems,
     Time: order.orderTime,
   });
-});
+};
 
 // ROUTE FOR CUSTOMER TO GET ALL ORDERS
-
-router.get("/orders/", authToken, async (req, res) => {
+const getAllOrders = async (req, res) => {
   // check whether customerID exists in the database
   const customer = await UserCustomer.findById(req.user._id);
   if (!customer)
@@ -135,10 +126,15 @@ router.get("/orders/", authToken, async (req, res) => {
     .populate("customer", "firstName lastName phone -_id")
     .select("orderItems -_id -customer");
 
-  if (!orders.length)
-    return res.status(404).send("There are no outstanding orders.");
+  if (!orders.length) return res.send("There are no outstanding orders.");
 
   res.send(orders);
-});
+};
 
-module.exports = router;
+module.exports = {
+  createUser,
+  displayMenu,
+  getOneProduct,
+  createOrder,
+  getAllOrders,
+};

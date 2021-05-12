@@ -1,10 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const { UserCustomer } = require("../models/userCustomer");
-const Joi = require("joi");
 const bcrypt = require("bcrypt");
+const Joi = require("joi");
+const { UserCustomer } = require("../models/userCustomer");
 
-router.post("/", async (req, res) => {
+const loginUserCustomer = async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -16,7 +14,7 @@ router.post("/", async (req, res) => {
 
   const token = user.generateAuthToken();
   res.send(token);
-});
+};
 
 function validate(req) {
   const schema = Joi.object({
@@ -27,4 +25,4 @@ function validate(req) {
   return schema.validate(req);
 }
 
-module.exports = router;
+module.exports = { loginUserCustomer };

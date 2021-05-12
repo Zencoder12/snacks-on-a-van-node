@@ -1,16 +1,13 @@
-const { Order, validateFulfillUpdate } = require("../models/order");
+const mongoose = require("mongoose");
 const {
   UserVendor,
   validateUserVendor,
   validateSetLocation,
 } = require("../models/userVendor");
-const express = require("express");
-const mongoose = require("mongoose");
-const router = express.Router();
+const { Order, validateFulfillUpdate } = require("../models/order");
 
-// ROUTE TO CREATE USER VENDOR
-
-router.post("/create-user", async (req, res) => {
+// CREATE USER VENDOR
+const createUser = async (req, res) => {
   // validate req.body object
   const { error } = validateUserVendor(req.body);
   if (error) return res.status(404).send(error.details[0].message);
@@ -34,13 +31,10 @@ router.post("/create-user", async (req, res) => {
     email: user.email,
     phone: user.phone,
   });
-});
+};
 
-// ------ VENDOR APP OPERATIONS ------
-
-// ROUTE FOR VENDOR TO SET VAN LOCATION AND OPEN FOR BUSINESS
-
-router.patch("/:vendorId/set-location/", async (req, res) => {
+// SET VAN LOCATION AND OPEN FOR BUSINESS
+const setLocation = async (req, res) => {
   // check whether path URL vendorID is a valid mongo DB id object
   if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
     return res.status(404).send("Not a valid vendor Id.");
@@ -70,11 +64,10 @@ router.patch("/:vendorId/set-location/", async (req, res) => {
     location: vendor.location,
     isOpen: vendor.isOpen,
   });
-});
+};
 
-// ROUTE TO GET OUTSTANDING ORDERS
-
-router.get("/:vendorId/outstanding-orders/", async (req, res) => {
+// GET OUTSTANDING ORDERS
+const getOutstandingOrders = async (req, res) => {
   // check whether path URL vendorID is a valid mongo DB id object
   if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
     return res.status(404).send("Not a valid vendor Id.");
@@ -90,6 +83,7 @@ router.get("/:vendorId/outstanding-orders/", async (req, res) => {
     vendor: req.params.vendorId,
     isFulfilled: false,
   })
+    .lean()
     .populate("customer", "firstName lastName phone -_id")
     .select("customer orderItems");
 
@@ -97,11 +91,30 @@ router.get("/:vendorId/outstanding-orders/", async (req, res) => {
     return res.status(404).send("There are no outstanding orders.");
 
   res.send(orders);
-});
+};
 
-// ROUTE TO MARK ORDER AS FULFILLED
+// GET ALL ORDERS
+const getAllOrders = async (req, res) => {
+  // check whether path URL vendorID is a valid mongo DB id object
+  if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
+    return res.status(404).send("Not a valid vendor Id.");
 
-router.patch("/:vendorId/:orderId/set-fulfill", async (req, res) => {
+  // check whether vendorID exists in the database
+  const vendor = await UserVendor.findById(req.params.vendorId);
+  if (!vendor)
+    return res.status(404).send("The vendor with the given ID was not found.");
+
+  // if order exists to the specific exists retrieve all and send to the client
+  const orders = await Order.find({ vendor: req.params.vendorId }).lean();
+
+  if (!orders.length)
+    return res.status(404).send("There are no outstanding orders.");
+
+  res.send(orders);
+};
+
+// MARK ORDER AS FULFILLED
+setFulfill = async (req, res) => {
   // check whether path URL vendorID is a valid mongo DB id object
   if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
     return res.status(404).send("Not a valid vendor Id.");
@@ -137,27 +150,12 @@ router.patch("/:vendorId/:orderId/set-fulfill", async (req, res) => {
     orderId: order._id,
     isFulfilled: order.isFulfilled,
   });
-});
+};
 
-// ROUTE TO GET ALL ORDERS
-
-router.get("/:vendorId/all-orders/", async (req, res) => {
-  // check whether path URL vendorID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
-    return res.status(404).send("Not a valid vendor Id.");
-
-  // check whether vendorID exists in the database
-  const vendor = await UserVendor.findById(req.params.vendorId);
-  if (!vendor)
-    return res.status(404).send("The vendor with the given ID was not found.");
-
-  // if order exists to the specific exists retrieve all and send to the client
-  const orders = await Order.find({ vendor: req.params.vendorId });
-
-  if (!orders.length)
-    return res.status(404).send("There are no outstanding orders.");
-
-  res.send(orders);
-});
-
-module.exports = router;
+module.exports = {
+  createUser,
+  setLocation,
+  getOutstandingOrders,
+  getAllOrders,
+  setFulfill,
+};

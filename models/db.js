@@ -7,6 +7,8 @@ require("../middleware/logging");
 const winston = require("winston");
 const mongoose = require("mongoose");
 
+/* HEROKU CONNECTION
+
 CONNECTION_STRING =
   "mongodb+srv://felipe:<password>@cluster0.owulp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
@@ -22,9 +24,8 @@ mongoose.connect(MONGO_URL, {
   useFindAndModify: false,
   dbName: "thebaldfigthers",
 });
+*/
 
-/*
-CONNECTIO TO USE LOCALLY
 mongoose
   .connect("mongodb://localhost/27017", {
     useNewUrlParser: true,
@@ -35,7 +36,6 @@ mongoose
   })
   .then(() => winston.info("Connected to MongoDB..."))
   .catch((err) => winston.error("Could not connect to MongoDB...", { err }));
-  */
 
 const db = mongoose.connection;
 
