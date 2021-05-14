@@ -1,53 +1,8 @@
-const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
-const {
-  UserCustomer,
-  validateUserCustomer,
-} = require("../models/userCustomer");
+const { UserCustomer } = require("../models/userCustomer");
 const { Product } = require("../models/product");
 const { UserVendor } = require("../models/userVendor");
 const { Order, validateOrder } = require("../models/order");
-
-// CREATE A CUSTOMER USER
-const createUser = async (req, res) => {
-  // validate req.body object
-  const { error } = validateUserCustomer(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  // check whether the provided email already exists in the database
-  let user = await UserCustomer.findOne({ email: req.body.email });
-  if (user)
-    return res
-      .status(400)
-      .send("User already registered. Please use another email.");
-
-  // after performed all validations, create new customer and save
-  user = new UserCustomer({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: req.body.password,
-    phone: req.body.phone,
-  });
-
-  /* hash the password before storing in the database */
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
-
-  await user.save();
-
-  /* generate jwt token and send through the header */
-  const token = user.generateAuthToken();
-  res
-    .header("x-auth-token", token)
-    .header("access-control-expose-headers", "x-auth-token")
-    .send({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      phone: user.phone,
-    });
-};
 
 // GET ALL PRODUCTS IN THE MENU
 const displayMenu = async (req, res) => {
@@ -132,7 +87,6 @@ const getAllOrders = async (req, res) => {
 };
 
 module.exports = {
-  createUser,
   displayMenu,
   getOneProduct,
   createOrder,

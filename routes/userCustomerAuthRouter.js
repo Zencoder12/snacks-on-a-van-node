@@ -1,9 +1,8 @@
 const express = require("express");
 const userCustomerAuthRouter = express.Router();
-const {
-  loginUserCustomer,
-} = require("../controllers/userCustomerAuthController");
+const { login, signUp } = require("../controllers/userCustomerAuthController");
 
-userCustomerAuthRouter.post("/", (req, res) => loginUserCustomer(req, res));
+userCustomerAuthRouter.post("/", (req, res) => login(req, res));
+userCustomerAuthRouter.post("/sign-up", (req, res) => signUp(req, res));
 
 module.exports = userCustomerAuthRouter;
