@@ -29,12 +29,6 @@ const userCustomerSchema = new mongoose.Schema({
     maxlength: 1024,
     required: true,
   },
-  phone: {
-    type: String,
-    minlength: 5,
-    maxlength: 25,
-    required: true,
-  },
   isCustomer: {
     type: Boolean,
     default: true,
@@ -58,7 +52,6 @@ function validateUserCustomer(user) {
     firstName: Joi.string().min(2).max(50).required(),
     lastName: Joi.string().min(2).max(50).required(),
     email: Joi.string().min(5).max(255).required().email(),
-    phone: Joi.string().min(5).max(25).required(),
     password: Joi.string().min(5).max(1024).required(),
   });
 

@@ -10,22 +10,26 @@ const productSchema = new mongoose.Schema({
     trim: true,
     required: true,
   },
-  sizes: {
-    type: [String],
-    validate: function (a) {
-      return a.length > 0;
-    },
-    message: "A product should have at least one size",
-    required: true,
-  },
   prices: {
-    type: [Number],
-    validate: function (a) {
-      a.length > 0;
-    },
-    message: "A product should have at least one price",
+    type: Object,
     required: true,
   },
+  // sizes: {
+  //   type: [String],
+  //   validate: function (a) {
+  //     return a.length > 0;
+  //   },
+  //   message: "A product should have at least one size",
+  //   required: true,
+  // },
+  // prices: {
+  //   type: [Number],
+  //   validate: function (a) {
+  //     a.length > 0;
+  //   },
+  //   message: "A product should have at least one price",
+  //   required: true,
+  // },
   category: {
     type: String,
     minlength: 5,
@@ -45,8 +49,8 @@ const Product = mongoose.model("Product", productSchema);
 function validateProduct(product) {
   const schema = Joi.object({
     productName: Joi.string().min(3).max(32).required(),
-    sizes: Joi.array().items(Joi.string()).min(1).max(50).required(),
-    prices: Joi.array().items(Joi.number()).min(1).max(50).required(),
+    // sizes: Joi.array().items(Joi.string()).min(1).max(50).required(),
+    // prices: Joi.array().items(Joi.number()).min(1).max(50).required(),
     category: Joi.string().min(5).max(32).required(),
     img: Joi.string().min(5).max(255).required(),
   });

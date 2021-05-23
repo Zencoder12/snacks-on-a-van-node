@@ -3,6 +3,7 @@ const { UserCustomer } = require("../models/userCustomer");
 const { Product } = require("../models/product");
 const { UserVendor } = require("../models/userVendor");
 const { Order, validateOrder } = require("../models/order");
+const winston = require("winston");
 
 // GET ALL PRODUCTS IN THE MENU
 const displayMenu = async (req, res) => {
@@ -79,7 +80,7 @@ const getAllOrders = async (req, res) => {
     customer: customer,
   })
     .populate("customer", "firstName lastName phone -_id")
-    .select("orderItems -_id -customer");
+    .select("orderItems orderTime -customer");
 
   if (!orders.length) return res.send("There are no outstanding orders.");
 

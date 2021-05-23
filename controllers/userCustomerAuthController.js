@@ -37,7 +37,6 @@ const signUp = async (req, res) => {
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
-    phone: req.body.phone,
   });
 
   /* hash the password before storing in the database */
@@ -55,7 +54,6 @@ const signUp = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phone: user.phone,
     });
 };
 
