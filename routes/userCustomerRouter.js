@@ -5,7 +5,8 @@ const {
   displayMenu,
   getOneProduct,
   createOrder,
-  getAllOrders,
+  getPastOrders,
+  getActiveOrders,
 } = require("../controllers/userCustomerController");
 
 // routes paths -> controllers
@@ -16,8 +17,11 @@ userCustomerRouter.get("/products/:productId", (req, res) =>
 userCustomerRouter.post("/new-order", authToken, (req, res) =>
   createOrder(req, res)
 );
-userCustomerRouter.get("/orders", authToken, (req, res) =>
-  getAllOrders(req, res)
+userCustomerRouter.get("/past-orders", authToken, (req, res) =>
+  getPastOrders(req, res)
+);
+userCustomerRouter.get("/active-orders", authToken, (req, res) =>
+  getActiveOrders(req, res)
 );
 
 module.exports = userCustomerRouter;

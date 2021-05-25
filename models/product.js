@@ -14,22 +14,6 @@ const productSchema = new mongoose.Schema({
     type: Object,
     required: true,
   },
-  // sizes: {
-  //   type: [String],
-  //   validate: function (a) {
-  //     return a.length > 0;
-  //   },
-  //   message: "A product should have at least one size",
-  //   required: true,
-  // },
-  // prices: {
-  //   type: [Number],
-  //   validate: function (a) {
-  //     a.length > 0;
-  //   },
-  //   message: "A product should have at least one price",
-  //   required: true,
-  // },
   category: {
     type: String,
     minlength: 5,

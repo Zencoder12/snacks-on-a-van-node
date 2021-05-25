@@ -66,8 +66,8 @@ const createOrder = async (req, res) => {
   });
 };
 
-// ROUTE FOR CUSTOMER TO GET ALL ORDERS
-const getAllOrders = async (req, res) => {
+// ROUTE FOR CUSTOMER TO GET PAST ORDERS
+const getPastOrders = async (req, res) => {
   // check whether customerID exists in the database
   const customer = await UserCustomer.findById(req.user._id);
   if (!customer)
@@ -78,11 +78,26 @@ const getAllOrders = async (req, res) => {
   // retrieve all customer's orders
   const orders = await Order.find({
     customer: customer,
-  })
-    .populate("customer", "firstName lastName phone -_id")
-    .select("orderItems orderTime -customer");
+    isFulfilled: true,
+  }).select("orderItems orderTime _id");
 
-  if (!orders.length) return res.send("There are no outstanding orders.");
+  res.send(orders);
+};
+
+// ROUTE FOR CUSTOMER TO GET ACTIVE ORDERS
+const getActiveOrders = async (req, res) => {
+  // check whether customerID exists in the database
+  const customer = await UserCustomer.findById(req.user._id);
+  if (!customer)
+    return res
+      .status(404)
+      .send("The customer with the given ID was not found.");
+
+  // retrieve all customer's orders
+  const orders = await Order.find({
+    customer: customer,
+    isFulfilled: false,
+  }).select("orderItems orderTime _id");
 
   res.send(orders);
 };
@@ -91,5 +106,6 @@ module.exports = {
   displayMenu,
   getOneProduct,
   createOrder,
-  getAllOrders,
+  getPastOrders,
+  getActiveOrders,
 };
