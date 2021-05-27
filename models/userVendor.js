@@ -9,6 +9,7 @@ const userVendorSchema = new mongoose.Schema({
     required: true,
     minlength: 5,
     maxlength: 255,
+    unique: true,
   },
   contactName: {
     type: String,
@@ -34,15 +35,6 @@ const userVendorSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 25,
     required: true,
-  },
-  location: {
-    type: String,
-    default: "",
-    maxlength: 255,
-  },
-  isOpen: {
-    type: Boolean,
-    default: false,
   },
   isVendor: {
     type: Boolean,
@@ -73,15 +65,5 @@ function validateUserVendor(user) {
   return schema.validate(user);
 }
 
-function validateSetLocation(user) {
-  const schema = Joi.object({
-    location: Joi.string().max(255).required(),
-    isOpen: Joi.boolean().required(),
-  });
-
-  return schema.validate(user);
-}
-
 exports.UserVendor = UserVendor;
 exports.validateUserVendor = validateUserVendor;
-exports.validateSetLocation = validateSetLocation;

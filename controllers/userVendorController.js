@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const {
-  UserVendor,
-  validateUserVendor,
-  validateSetLocation,
-} = require("../models/userVendor");
+const { UserVendor, validateUserVendor } = require("../models/userVendor");
 const { Order, validateFulfillUpdate } = require("../models/order");
+const {
+  VendorLocation,
+  validateVendorLocation,
+} = require("../models/vendorLocation");
 
 // CREATE USER VENDOR
 const createUser = async (req, res) => {
@@ -36,34 +36,30 @@ const createUser = async (req, res) => {
 
 // SET VAN LOCATION AND OPEN FOR BUSINESS
 const setLocation = async (req, res) => {
-  // check whether path URL vendorID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
-    return res.status(404).send("Not a valid vendor Id.");
-
   // validate req.body object
-  const { error } = validateSetLocation(req.body);
+  const { error } = validateVendorLocation(req.body);
   if (error) res.status(400).send(error.details[0].message);
 
-  /* after performed all validations check whether vendorID
-  exists in the database and update location and isOpen fields status */
-  const vendor = await UserVendor.findByIdAndUpdate(
-    req.params.vendorId,
-    {
-      $set: {
-        location: req.body.location,
-        isOpen: req.body.isOpen,
-      },
-    },
-    { new: true }
-  );
+  const vendor = await VendorLocation.findOne({
+    vendorName: req.body.vendorName,
+  });
+  if (vendor)
+    return res
+      .status(404)
+      .send("The location for this vendor has already been set.");
 
-  if (!vendor)
-    return res.status(404).send("The vendor with the given ID was not found.");
+  const vendorLocation = new VendorLocation({
+    vendorName: req.body.vendorName,
+    coordinates: req.body.coordinates,
+    address: req.body.address,
+  });
+
+  await vendorLocation.save();
 
   res.send({
-    vendor: vendor.vendorName,
-    location: vendor.location,
-    isOpen: vendor.isOpen,
+    vendorName: vendorLocation.vendorName,
+    coordinates: vendorLocation.location,
+    address: vendorLocation.isOpen,
   });
 };
 

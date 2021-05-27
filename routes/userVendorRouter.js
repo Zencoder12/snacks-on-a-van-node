@@ -10,9 +10,7 @@ const {
 
 // routes paths -> controllers
 userVendorRouter.post("/create-user", (req, res) => createUser(req, res));
-userVendorRouter.patch("/:vendorId/set-location", (req, res) =>
-  setLocation(req, res)
-);
+userVendorRouter.post("/set-location", (req, res) => setLocation(req, res));
 userVendorRouter.get("/:vendorId/outstanding-orders", (req, res) =>
   getOutstandingOrders(req, res)
 );
