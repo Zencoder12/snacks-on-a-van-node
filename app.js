@@ -12,6 +12,7 @@ const homeRouter = require("./routes/homeRouter");
 const userCustomerRouter = require("./routes/userCustomerRouter");
 const userCustomerAuthRouter = require("./routes/userCustomerAuthRouter");
 const userVendorRouter = require("./routes/userVendorRouter");
+const userVendorAuthRouter = require("./routes/userVendorAuthRouter");
 
 if (!config.get("jwtPrivateKey")) {
   winston.error("FATAL ERROR: jwtPrivateKey is not defined.");
@@ -26,6 +27,7 @@ app.use("/", homeRouter);
 app.use("/customers", userCustomerRouter);
 app.use("/customers/auth", userCustomerAuthRouter);
 app.use("/vendors", userVendorRouter);
+app.use("/vendors/auth", userVendorAuthRouter);
 
 /* replaces express routes try and catch block */
 app.use(error);

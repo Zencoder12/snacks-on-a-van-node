@@ -1,8 +1,16 @@
+const config = require("config");
 const Joi = require("joi");
+const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
 const userVendorSchema = new mongoose.Schema({
   vendorName: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 255,
+  },
+  contactName: {
     type: String,
     required: true,
     minlength: 5,
@@ -42,14 +50,24 @@ const userVendorSchema = new mongoose.Schema({
   },
 });
 
+// encapsulated function to generate jwt token
+userVendorSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    { _id: this._id, vendorName: this.vendorName, isVendor: this.isVendor },
+    config.get("jwtPrivateKey")
+  );
+  return token;
+};
+
 const UserVendor = mongoose.model("User_vendor", userVendorSchema);
 
 function validateUserVendor(user) {
   const schema = Joi.object({
     email: Joi.string().min(5).max(255).required().email(),
     phone: Joi.string().min(5).max(25).required(),
-    password: Joi.string().min(5).max(255).required(),
+    password: Joi.string().min(5).max(1024).required(),
     vendorName: Joi.string().min(5).max(255).required(),
+    contactName: Joi.string().min(5).max(255).required(),
   });
 
   return schema.validate(user);

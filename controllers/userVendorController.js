@@ -19,9 +19,10 @@ const createUser = async (req, res) => {
   // after performed all validations, create new vendor and save
   user = new UserVendor({
     vendorName: req.body.vendorName,
+    contactName: req.body.contactName,
+    phone: req.body.phone,
     email: req.body.email,
     password: req.body.password,
-    phone: req.body.phone,
   });
 
   await user.save();
