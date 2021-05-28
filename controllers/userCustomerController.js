@@ -44,25 +44,25 @@ const createOrder = async (req, res) => {
       .send("The customer with the given ID was not found.");
 
   // check whether vendorID provided in req.body exists in the database
-  const vendor = await UserVendor.findById(req.body.vendor);
-  if (!vendor)
-    return res.status(404).send("The vendor with the given ID was not found.");
+  const vendor = await UserVendor.findOne({ vendorName: req.body.vendorName });
+  if (!vendor) return res.status(404).send("The vendor was not found.");
 
   // after all validations, create new order and return to the client
   let order = new Order({
-    customer: customer._id,
-    vendor: vendor._id,
+    customerEmail: customer.email,
+    vendorName: vendor.vendorName,
     orderItems: req.body.orderItems,
   });
 
   order = await order.save();
 
   res.send({
-    OrderId: order._id,
-    Customer: customer.firstName,
-    Vendor: vendor.vendorName,
-    Items: order.orderItems,
-    Time: order.orderTime,
+    orderId: order._id,
+    customer: customer.firstName,
+    customerEmail: customer.email,
+    vendor: vendor.vendorName,
+    orderItems: order.orderItems,
+    time: order.orderTime,
   });
 };
 

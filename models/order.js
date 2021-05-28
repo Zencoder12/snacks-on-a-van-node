@@ -3,15 +3,19 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
 const orderSchema = new mongoose.Schema({
-  customer: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: "User_customer",
+  customerEmail: {
+    type: String,
+    minlength: 5,
+    maxlength: 255,
     required: true,
+    unique: true,
   },
-  vendor: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: "User_vendor",
+  vendorName: {
+    type: String,
     required: true,
+    minlength: 5,
+    maxlength: 255,
+    unique: true,
   },
   orderItems: {
     type: Array,
@@ -46,7 +50,7 @@ const Order = mongoose.model("Order", orderSchema);
 
 function validateOrder(order) {
   const orderSchema = Joi.object({
-    vendor: Joi.objectId().required(),
+    vendorName: Joi.string().min(5).max(255).required(),
     orderItems: Joi.array().min(1).required(),
   });
 

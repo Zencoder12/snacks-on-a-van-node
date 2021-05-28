@@ -9,7 +9,7 @@ const vendorLocationSchema = new mongoose.Schema({
     maxlength: 255,
   },
   coordinates: {
-    type: Array,
+    type: Object,
     required: true,
   },
   address: {
@@ -24,7 +24,7 @@ const VendorLocation = mongoose.model("Vendor_location", vendorLocationSchema);
 function validateVendorLocation(data) {
   const schema = Joi.object({
     vendorName: Joi.string().min(5).max(255).required(),
-    coordinates: Joi.array().min(2).required(),
+    coordinates: Joi.object().required(),
     address: Joi.string().min(5).max(255).required(),
   });
 

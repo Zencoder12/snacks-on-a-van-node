@@ -58,9 +58,15 @@ const setLocation = async (req, res) => {
 
   res.send({
     vendorName: vendorLocation.vendorName,
-    coordinates: vendorLocation.location,
-    address: vendorLocation.isOpen,
+    coordinates: vendorLocation.coordinates,
+    address: vendorLocation.address,
   });
+};
+
+const getVendorsLocations = async (req, res) => {
+  const vendorLocations = await VendorLocation.find();
+
+  res.send(vendorLocations);
 };
 
 // GET OUTSTANDING ORDERS
@@ -153,6 +159,7 @@ module.exports = {
   createUser,
   setLocation,
   getOutstandingOrders,
+  getVendorsLocations,
   getAllOrders,
   setFulfill,
 };
