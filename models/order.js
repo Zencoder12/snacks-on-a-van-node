@@ -3,19 +3,23 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
 const orderSchema = new mongoose.Schema({
+  customerName: {
+    type: String,
+    minlength: 3,
+    maxlength: 255,
+    required: true,
+  },
   customerEmail: {
     type: String,
     minlength: 5,
     maxlength: 255,
     required: true,
-    unique: true,
   },
   vendorName: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 255,
-    unique: true,
   },
   orderItems: {
     type: Array,

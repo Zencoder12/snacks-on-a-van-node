@@ -45,7 +45,7 @@ const setLocation = async (req, res) => {
   });
   if (vendor)
     return res
-      .status(404)
+      .status(400)
       .send("The location for this vendor has already been set.");
 
   const vendorLocation = new VendorLocation({
@@ -63,6 +63,16 @@ const setLocation = async (req, res) => {
   });
 };
 
+// SET VAN STATUS NOT OPEN FOR BUSINESS
+const closeLocation = async (req, res) => {
+  const vendorLocation = await VendorLocation.findOneAndDelete({
+    vendorName: req.body.vendorName,
+  });
+
+  res.send(vendorLocation);
+};
+
+// GET ALL LOCATIONS OF VENDORS THAT ARE OPEN FOR BUSINESS
 const getVendorsLocations = async (req, res) => {
   const vendorLocations = await VendorLocation.find();
 
@@ -96,22 +106,18 @@ const getOutstandingOrders = async (req, res) => {
   res.send(orders);
 };
 
-// GET ALL ORDERS
-const getAllOrders = async (req, res) => {
-  // check whether path URL vendorID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
-    return res.status(404).send("Not a valid vendor Id.");
-
+// GET PAST ORDERS
+const getPastOrders = async (req, res) => {
   // check whether vendorID exists in the database
-  const vendor = await UserVendor.findById(req.params.vendorId);
+  const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
     return res.status(404).send("The vendor with the given ID was not found.");
 
-  // if order exists to the specific exists retrieve all and send to the client
-  const orders = await Order.find({ vendor: req.params.vendorId }).lean();
-
-  if (!orders.length)
-    return res.status(404).send("There are no outstanding orders.");
+  // if order exists and is fulfilled, send back to the client
+  const orders = await Order.find({
+    vendorName: vendor.vendorName,
+    isFulfilled: true,
+  }).lean();
 
   res.send(orders);
 };
@@ -156,10 +162,11 @@ setFulfill = async (req, res) => {
 };
 
 module.exports = {
+  closeLocation,
   createUser,
   setLocation,
   getOutstandingOrders,
   getVendorsLocations,
-  getAllOrders,
+  getPastOrders,
   setFulfill,
 };

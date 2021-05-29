@@ -1,11 +1,13 @@
+const authToken = require("../middleware/authToken");
 const express = require("express");
 const userVendorRouter = express.Router();
 const {
+  closeLocation,
   createUser,
   setLocation,
   getOutstandingOrders,
   getVendorsLocations,
-  getAllOrders,
+  getPastOrders,
   setFulfill,
 } = require("../controllers/userVendorController");
 
@@ -18,11 +20,14 @@ userVendorRouter.get("/vendors-locations", (req, res) =>
 userVendorRouter.get("/:vendorId/outstanding-orders", (req, res) =>
   getOutstandingOrders(req, res)
 );
-userVendorRouter.get("/:vendorId/all-orders", (req, res) =>
-  getAllOrders(req, res)
+userVendorRouter.get("/past-orders", authToken, (req, res) =>
+  getPastOrders(req, res)
 );
 userVendorRouter.patch("/:vendorId/:orderId/set-fulfill", (req, res) =>
   setFulfill(req, res)
+);
+userVendorRouter.delete("/close-location", (req, res) =>
+  closeLocation(req, res)
 );
 
 module.exports = userVendorRouter;

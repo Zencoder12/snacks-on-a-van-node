@@ -3,7 +3,6 @@ const { UserCustomer } = require("../models/userCustomer");
 const { Product } = require("../models/product");
 const { UserVendor } = require("../models/userVendor");
 const { Order, validateOrder } = require("../models/order");
-const winston = require("winston");
 
 // GET ALL PRODUCTS IN THE MENU
 const displayMenu = async (req, res) => {
@@ -49,6 +48,7 @@ const createOrder = async (req, res) => {
 
   // after all validations, create new order and return to the client
   let order = new Order({
+    customerName: customer.firstName,
     customerEmail: customer.email,
     vendorName: vendor.vendorName,
     orderItems: req.body.orderItems,
@@ -69,15 +69,17 @@ const createOrder = async (req, res) => {
 // ROUTE FOR CUSTOMER TO GET PAST ORDERS
 const getPastOrders = async (req, res) => {
   // check whether customerID exists in the database
-  const customer = await UserCustomer.findById(req.user._id);
+  const customer = await UserCustomer.findOne({
+    email: req.user.email,
+  });
   if (!customer)
     return res
       .status(404)
       .send("The customer with the given ID was not found.");
 
-  // retrieve all customer's orders
+  // retrieve previous customer's orders
   const orders = await Order.find({
-    customer: customer,
+    customerEmail: customer.email,
     isFulfilled: true,
   }).select("orderItems orderTime _id");
 
@@ -87,15 +89,17 @@ const getPastOrders = async (req, res) => {
 // ROUTE FOR CUSTOMER TO GET ACTIVE ORDERS
 const getActiveOrders = async (req, res) => {
   // check whether customerID exists in the database
-  const customer = await UserCustomer.findById(req.user._id);
+  const customer = await UserCustomer.findOne({
+    email: req.user.email,
+  });
   if (!customer)
     return res
       .status(404)
       .send("The customer with the given ID was not found.");
 
-  // retrieve all customer's orders
+  // retrieve active customer's orders
   const orders = await Order.find({
-    customer: customer,
+    customerEmail: customer.email,
     isFulfilled: false,
   }).select("orderItems orderTime _id");
 
