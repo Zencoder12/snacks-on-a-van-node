@@ -14,21 +14,6 @@ const displayMenu = async (req, res) => {
   res.send(products);
 };
 
-// GET VIEW DETAILS OF A SNACK
-const getOneProduct = async (req, res) => {
-  // check whether path URL productID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.productId))
-    return res.status(404).send("Not a valid product Id.");
-
-  // check whether productID exists in the database. If exists, return it to the client
-  const product = await Product.findById(req.params.productId).lean();
-
-  if (!product)
-    return res.status(404).send("The product with the given ID was not found.");
-
-  res.send(product);
-};
-
 // ROUTE FOR CUSTOMER TO START A NEW ORDER
 const createOrder = async (req, res) => {
   // validate req.body object
@@ -108,7 +93,6 @@ const getActiveOrders = async (req, res) => {
 
 module.exports = {
   displayMenu,
-  getOneProduct,
   createOrder,
   getPastOrders,
   getActiveOrders,

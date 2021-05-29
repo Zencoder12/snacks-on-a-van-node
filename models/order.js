@@ -43,7 +43,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
-  isPickedUp: {
+  isReady: {
     type: Boolean,
     required: true,
     default: false,
@@ -69,6 +69,16 @@ function validateFulfillUpdate(order) {
   return orderSchema.validate(order);
 }
 
+function validateIsReadyUpdate(order) {
+  const orderSchema = Joi.object({
+    orderId: Joi.objectId().required(),
+    isReady: Joi.boolean().required(),
+  });
+
+  return orderSchema.validate(order);
+}
+
 exports.Order = Order;
 exports.validateOrder = validateOrder;
 exports.validateFulfillUpdate = validateFulfillUpdate;
+exports.validateIsReadyUpdate = validateIsReadyUpdate;

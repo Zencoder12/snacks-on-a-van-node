@@ -1,38 +1,14 @@
 const mongoose = require("mongoose");
-const { UserVendor, validateUserVendor } = require("../models/userVendor");
-const { Order, validateFulfillUpdate } = require("../models/order");
+const { UserVendor } = require("../models/userVendor");
+const {
+  Order,
+  validateFulfillUpdate,
+  validateIsReadyUpdate,
+} = require("../models/order");
 const {
   VendorLocation,
   validateVendorLocation,
 } = require("../models/vendorLocation");
-
-// CREATE USER VENDOR
-const createUser = async (req, res) => {
-  // validate req.body object
-  const { error } = validateUserVendor(req.body);
-  if (error) return res.status(404).send(error.details[0].message);
-
-  // check whether the provided email already exists in the database
-  let user = await UserVendor.findOne({ email: req.body.email });
-  if (user) return res.status(404).send("User already registered.");
-
-  // after performed all validations, create new vendor and save
-  user = new UserVendor({
-    vendorName: req.body.vendorName,
-    contactName: req.body.contactName,
-    phone: req.body.phone,
-    email: req.body.email,
-    password: req.body.password,
-  });
-
-  await user.save();
-
-  res.send({
-    vendorName: user.vendorName,
-    email: user.email,
-    phone: user.phone,
-  });
-};
 
 // SET VAN LOCATION AND OPEN FOR BUSINESS
 const setLocation = async (req, res) => {
@@ -80,28 +56,39 @@ const getVendorsLocations = async (req, res) => {
 };
 
 // GET OUTSTANDING ORDERS
-const getOutstandingOrders = async (req, res) => {
-  // check whether path URL vendorID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
-    return res.status(404).send("Not a valid vendor Id.");
-
+const getActiveOrders = async (req, res) => {
   // check whether vendorID exists in the database
-  const vendor = await UserVendor.findById(req.params.vendorId);
+  const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
     return res.status(404).send("The vendor with the given ID was not found.");
 
   // retrieve all vendor's orders and filter the ones which isFulfilled is marked as false
   // if outstanding orders exists, send back to the client
   const orders = await Order.find({
-    vendor: req.params.vendorId,
+    vendorName: vendor.vendorName,
     isFulfilled: false,
   })
     .lean()
-    .populate("customer", "firstName lastName phone -_id")
-    .select("customer orderItems");
+    .select("customerName orderItems orderTime");
 
-  if (!orders.length)
-    return res.status(404).send("There are no outstanding orders.");
+  res.send(orders);
+};
+
+// GET ORDERS READY FOR PICK UP
+const getReadyOrders = async (req, res) => {
+  // check whether vendorID exists in the database
+  const vendor = await UserVendor.findById(req.user._id);
+  if (!vendor)
+    return res.status(404).send("The vendor with the given ID was not found.");
+
+  // retrieve all vendor's orders and filter the ones which are ready for customer pick-up
+  const orders = await Order.find({
+    vendorName: vendor.vendorName,
+    isFulfilled: false,
+    isReady: true,
+  })
+    .lean()
+    .select("customerName orderItems orderTime");
 
   res.send(orders);
 };
@@ -120,6 +107,37 @@ const getPastOrders = async (req, res) => {
   }).lean();
 
   res.send(orders);
+};
+
+// MARK ORDER AS READY
+setIsReady = async (req, res) => {
+  // validate req.body object
+  const { error } = validateIsReadyUpdate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // check whether vendorID exists in the database
+  const vendor = await UserVendor.findById(req.user._id);
+  if (!vendor)
+    return res.status(404).send("The vendor with the given ID was not found.");
+
+  // check whether orderID exists in the database. If exists, update isFulfilled field
+  const order = await Order.findByIdAndUpdate(
+    req.body.orderId,
+    {
+      $set: {
+        isReady: req.body.isReady,
+      },
+    },
+    { new: true }
+  );
+
+  if (!order)
+    return res.status(400).send("The order with the given ID was not found.");
+
+  res.send({
+    orderId: order._id,
+    isReady: order.isReady,
+  });
 };
 
 // MARK ORDER AS FULFILLED
@@ -163,10 +181,11 @@ setFulfill = async (req, res) => {
 
 module.exports = {
   closeLocation,
-  createUser,
   setLocation,
-  getOutstandingOrders,
+  getActiveOrders,
   getVendorsLocations,
   getPastOrders,
+  getReadyOrders,
   setFulfill,
+  setIsReady,
 };
