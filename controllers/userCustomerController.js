@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
-const { UserCustomer } = require("../models/userCustomer");
+const {
+  UserCustomer,
+  validateProfileUpdate,
+} = require("../models/userCustomer");
 const { Product } = require("../models/product");
 const { UserVendor } = require("../models/userVendor");
 const {
@@ -8,6 +11,7 @@ const {
   validateSetCancel,
   validateUpdateOrder,
 } = require("../models/order");
+const bcrypt = require("bcrypt");
 
 // GET ALL PRODUCTS IN THE MENU
 const displayMenu = async (req, res) => {
@@ -173,6 +177,39 @@ const setCancel = async (req, res) => {
   });
 };
 
+const updateProfile = async (req, res) => {
+  // validate req.body object
+  const { error } = validateProfileUpdate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // check whether customerID exists in the database
+  const customer = await UserCustomer.findOne({
+    email: req.user.email,
+  });
+  if (!customer)
+    return res
+      .status(400)
+      .send("The customer with the given ID was not found.");
+
+  const salt = await bcrypt.genSalt(10);
+  const newPassword = await bcrypt.hash(req.body.password, salt);
+
+  // update the customer in the database
+  const user = await UserCustomer.findOneAndUpdate(
+    { email: req.user.email },
+    {
+      $set: {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        password: newPassword,
+      },
+    },
+    { new: true }
+  );
+
+  res.send({ user });
+};
+
 module.exports = {
   displayMenu,
   createOrder,
@@ -181,4 +218,5 @@ module.exports = {
   getOneOrder,
   setCancel,
   updateOrder,
+  updateProfile,
 };

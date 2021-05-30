@@ -9,6 +9,7 @@ const {
   getOneOrder,
   setCancel,
   updateOrder,
+  updateProfile,
 } = require("../controllers/userCustomerController");
 
 // routes paths -> controllers
@@ -31,6 +32,9 @@ userCustomerRouter.patch("/cancel-order", authToken, (req, res) =>
 );
 userCustomerRouter.patch("/update-order", authToken, (req, res) =>
   updateOrder(req, res)
+);
+userCustomerRouter.patch("/update-profile", authToken, (req, res) =>
+  updateProfile(req, res)
 );
 
 module.exports = userCustomerRouter;

@@ -63,5 +63,16 @@ function validateUserCustomer(user) {
   return schema.validate(user);
 }
 
+function validateProfileUpdate(user) {
+  const schema = Joi.object({
+    firstName: Joi.string().min(2).max(50).required(),
+    lastName: Joi.string().min(2).max(50).required(),
+    password: Joi.string().min(5).max(1024).required(),
+  });
+
+  return schema.validate(user);
+}
+
 exports.UserCustomer = UserCustomer;
 exports.validateUserCustomer = validateUserCustomer;
+exports.validateProfileUpdate = validateProfileUpdate;

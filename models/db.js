@@ -7,7 +7,7 @@ require("../middleware/logging");
 const winston = require("winston");
 const mongoose = require("mongoose");
 
-// HEROKU CONNECTION
+// // HEROKU CONNECTION
 
 CONNECTION_STRING =
   "mongodb+srv://felipe:<password>@cluster0.owulp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";

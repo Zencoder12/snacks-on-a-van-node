@@ -174,6 +174,12 @@ setFulfill = async (req, res) => {
   });
 };
 
+updateProfile = async (req, res) => {
+  const vendor = await UserVendor.findById(req.user._id);
+  if (!vendor)
+    return res.status(400).send("The vendor with the given ID was not found.");
+};
+
 module.exports = {
   closeLocation,
   setLocation,
