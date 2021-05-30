@@ -2,7 +2,13 @@ const mongoose = require("mongoose");
 const { UserCustomer } = require("../models/userCustomer");
 const { Product } = require("../models/product");
 const { UserVendor } = require("../models/userVendor");
-const { Order, validateOrder, validateSetCancel } = require("../models/order");
+const {
+  Order,
+  validateOrder,
+  validateSetCancel,
+  validateUpdateOrder,
+} = require("../models/order");
+const { date } = require("joi");
 
 // GET ALL PRODUCTS IN THE MENU
 const displayMenu = async (req, res) => {
@@ -49,6 +55,36 @@ const createOrder = async (req, res) => {
     orderItems: order.orderItems,
     time: order.orderTime,
   });
+};
+
+// ROUTE FOR A CUSTOMER TO CHANGE/UPDATE THE ORDER
+const updateOrder = async (req, res) => {
+  // validate req.body object
+  const { error } = validateUpdateOrder(req.body);
+  if (error) return res.status(404).send(error.details[0].message);
+
+  // check whether customerID exists in the database
+  const customer = await UserCustomer.findById(req.user._id);
+  if (!customer)
+    return res
+      .status(404)
+      .send("The customer with the given ID was not found.");
+
+  const order = await Order.findByIdAndUpdate(
+    req.body.orderId,
+    {
+      $set: {
+        orderItems: req.body.orderItems,
+        orderTime: new Date(),
+      },
+    },
+    { new: true }
+  );
+
+  if (!order)
+    return res.status(400).send("The order with the given ID was not found.");
+
+  res.send(order);
 };
 
 // ROUTE FOR CUSTOMER TO GET PAST ORDERS
@@ -152,4 +188,5 @@ module.exports = {
   getActiveOrders,
   getOneOrder,
   setCancel,
+  updateOrder,
 };

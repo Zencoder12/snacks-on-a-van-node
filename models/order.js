@@ -93,8 +93,18 @@ function validateSetCancel(order) {
   return orderSchema.validate(order);
 }
 
+function validateUpdateOrder(order) {
+  const orderSchema = Joi.object({
+    orderId: Joi.objectId().required(),
+    orderItems: Joi.array().min(1).required(),
+  });
+
+  return orderSchema.validate(order);
+}
+
 exports.Order = Order;
 exports.validateOrder = validateOrder;
 exports.validateFulfillUpdate = validateFulfillUpdate;
 exports.validateIsReadyUpdate = validateIsReadyUpdate;
 exports.validateSetCancel = validateSetCancel;
+exports.validateUpdateOrder = validateUpdateOrder;
