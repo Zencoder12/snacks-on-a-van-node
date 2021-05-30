@@ -8,7 +8,6 @@ const {
   validateSetCancel,
   validateUpdateOrder,
 } = require("../models/order");
-const { date } = require("joi");
 
 // GET ALL PRODUCTS IN THE MENU
 const displayMenu = async (req, res) => {
@@ -24,18 +23,18 @@ const displayMenu = async (req, res) => {
 const createOrder = async (req, res) => {
   // validate req.body object
   const { error } = validateOrder(req.body);
-  if (error) return res.status(404).send(error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
 
   // check whether customerID exists in the database
   const customer = await UserCustomer.findById(req.user._id);
   if (!customer)
     return res
-      .status(404)
+      .status(400)
       .send("The customer with the given ID was not found.");
 
   // check whether vendorID provided in req.body exists in the database
   const vendor = await UserVendor.findOne({ vendorName: req.body.vendorName });
-  if (!vendor) return res.status(404).send("The vendor was not found.");
+  if (!vendor) return res.status(400).send("The vendor was not found.");
 
   // after all validations, create new order and return to the client
   let order = new Order({
@@ -54,13 +53,13 @@ const createOrder = async (req, res) => {
 const updateOrder = async (req, res) => {
   // validate req.body object
   const { error } = validateUpdateOrder(req.body);
-  if (error) return res.status(404).send(error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
 
   // check whether customerID exists in the database
   const customer = await UserCustomer.findById(req.user._id);
   if (!customer)
     return res
-      .status(404)
+      .status(400)
       .send("The customer with the given ID was not found.");
 
   const order = await Order.findByIdAndUpdate(
@@ -88,7 +87,7 @@ const getPastOrders = async (req, res) => {
   });
   if (!customer)
     return res
-      .status(404)
+      .status(400)
       .send("The customer with the given ID was not found.");
 
   // retrieve previous customer's orders
@@ -108,7 +107,7 @@ const getActiveOrders = async (req, res) => {
   });
   if (!customer)
     return res
-      .status(404)
+      .status(400)
       .send("The customer with the given ID was not found.");
 
   // retrieve active customer's orders
@@ -142,7 +141,7 @@ const getOneOrder = async (req, res) => {
 const setCancel = async (req, res) => {
   // validate req.body object
   const { error } = validateSetCancel(req.body);
-  if (error) return res.status(404).send(error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
 
   // check whether customerID exists in the database
   const customer = await UserCustomer.findOne({
@@ -150,7 +149,7 @@ const setCancel = async (req, res) => {
   });
   if (!customer)
     return res
-      .status(404)
+      .status(400)
       .send("The customer with the given ID was not found.");
 
   // check whether orderID exists in the database. If exists, update isFulfilled field

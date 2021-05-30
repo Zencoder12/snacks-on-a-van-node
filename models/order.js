@@ -78,6 +78,7 @@ function validateFulfillUpdate(order) {
 function validateIsReadyUpdate(order) {
   const orderSchema = Joi.object({
     orderId: Joi.objectId().required(),
+    isDiscounted: Joi.boolean().required(),
     isReady: Joi.boolean().required(),
   });
 

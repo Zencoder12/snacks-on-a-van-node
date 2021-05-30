@@ -60,7 +60,7 @@ const getActiveOrders = async (req, res) => {
   // check whether vendorID exists in the database
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(404).send("The vendor with the given ID was not found.");
+    return res.status(400).send("The vendor with the given ID was not found.");
 
   // retrieve all vendor's orders and filter the ones which isFulfilled is marked as false
   // if outstanding orders exists, send back to the client
@@ -80,7 +80,7 @@ const getReadyOrders = async (req, res) => {
   // check whether vendorID exists in the database
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(404).send("The vendor with the given ID was not found.");
+    return res.status(400).send("The vendor with the given ID was not found.");
 
   // retrieve all vendor's orders and filter the ones which are ready for customer pick-up
   const orders = await Order.find({
@@ -99,7 +99,7 @@ const getPastOrders = async (req, res) => {
   // check whether vendorID exists in the database
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(404).send("The vendor with the given ID was not found.");
+    return res.status(400).send("The vendor with the given ID was not found.");
 
   // if order exists and is fulfilled, send back to the client
   const orders = await Order.find({
@@ -127,6 +127,7 @@ setIsReady = async (req, res) => {
     {
       $set: {
         isReady: req.body.isReady,
+        isDiscounted: req.body.isDiscounted,
       },
     },
     { new: true }
@@ -138,6 +139,7 @@ setIsReady = async (req, res) => {
   res.send({
     orderId: order._id,
     isReady: order.isReady,
+    isDiscounted: order.isDiscounted,
   });
 };
 
@@ -150,7 +152,7 @@ setFulfill = async (req, res) => {
   // check whether vendorID exists in the database
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(404).send("The vendor with the given ID was not found.");
+    return res.status(400).send("The vendor with the given ID was not found.");
 
   // check whether orderID exists in the database. If exists, update isFulfilled field
   const order = await Order.findByIdAndUpdate(
