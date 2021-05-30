@@ -303,3 +303,23 @@ comitID: 598c15080ed9a09ab729d6b0f0740cfcf43908db
 
 back-end: https://github.com/INFO30005-2021-SM1/project-t13-thebaldfighters
 commitID: f2a3b91647079e43bfb648dec11112cc1bbd44bf
+
+## DELIVERABLE 4 INFORMATION
+
+1. URL
+
+front-end: https://secure-badlands-10230.herokuapp.com/
+back-end: https://the-bald-figthers.herokuapp.com/
+
+2. REPOS
+
+front-end: https://github.com/INFO30005-2021-SM1/project-frontend-t13-thebaldfighters
+comitID: e8116b5ab8a118ba57e0cd32b24e48e7ed20fef9
+
+back-end: https://github.com/INFO30005-2021-SM1/project-t13-thebaldfighters
+commitID: 90c18dd9775b1f20c46bad9f94df3897ac4dbaae
+
+3. ATLAS ACCESS:
+
+- username: fleefuhuangl@student.unimelb.edu.au
+- password: info3005
