@@ -47,14 +47,7 @@ const createOrder = async (req, res) => {
 
   order = await order.save();
 
-  res.send({
-    orderId: order._id,
-    customer: customer.firstName,
-    customerEmail: customer.email,
-    vendor: vendor.vendorName,
-    orderItems: order.orderItems,
-    time: order.orderTime,
-  });
+  res.send(order);
 };
 
 // ROUTE FOR A CUSTOMER TO CHANGE/UPDATE THE ORDER
