@@ -6,6 +6,7 @@ const {
   createOrder,
   getPastOrders,
   getActiveOrders,
+  getOneOrder,
   setCancel,
 } = require("../controllers/userCustomerController");
 
@@ -20,6 +21,9 @@ userCustomerRouter.get("/past-orders", authToken, (req, res) =>
 );
 userCustomerRouter.get("/active-orders", authToken, (req, res) =>
   getActiveOrders(req, res)
+);
+userCustomerRouter.post("/get-order", authToken, (req, res) =>
+  getOneOrder(req, res)
 );
 userCustomerRouter.patch("/cancel-order", authToken, (req, res) =>
   setCancel(req, res)

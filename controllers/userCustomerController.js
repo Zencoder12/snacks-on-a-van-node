@@ -91,6 +91,25 @@ const getActiveOrders = async (req, res) => {
   res.send(orders);
 };
 
+// ROUTE FOR CUSTOMER APP TO GET CURRENT ORDER (TRACKING PAGE)
+const getOneOrder = async (req, res) => {
+  // check whether customerID exists in the database
+  const customer = await UserCustomer.findOne({
+    email: req.user.email,
+  });
+  if (!customer)
+    return res
+      .status(404)
+      .send("The customer with the given ID was not found.");
+
+  // retrieve active customer's orders
+  const order = await Order.findById(req.body.orderId).lean();
+  if (!order)
+    return res.status(404).send("The order with the given ID was not found.");
+
+  res.send(order);
+};
+
 const setCancel = async (req, res) => {
   // validate req.body object
   const { error } = validateSetCancel(req.body);
@@ -111,6 +130,7 @@ const setCancel = async (req, res) => {
     {
       $set: {
         isCancelled: req.body.isCancelled,
+        isFulfilled: true,
       },
     },
     { new: true }
@@ -130,5 +150,6 @@ module.exports = {
   createOrder,
   getPastOrders,
   getActiveOrders,
+  getOneOrder,
   setCancel,
 };
