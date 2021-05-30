@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { UserCustomer } = require("../models/userCustomer");
 const { Product } = require("../models/product");
 const { UserVendor } = require("../models/userVendor");
-const { Order, validateOrder } = require("../models/order");
+const { Order, validateOrder, validateSetCancel } = require("../models/order");
 
 // GET ALL PRODUCTS IN THE MENU
 const displayMenu = async (req, res) => {
@@ -91,9 +91,44 @@ const getActiveOrders = async (req, res) => {
   res.send(orders);
 };
 
+const setCancel = async (req, res) => {
+  // validate req.body object
+  const { error } = validateSetCancel(req.body);
+  if (error) return res.status(404).send(error.details[0].message);
+
+  // check whether customerID exists in the database
+  const customer = await UserCustomer.findOne({
+    email: req.user.email,
+  });
+  if (!customer)
+    return res
+      .status(404)
+      .send("The customer with the given ID was not found.");
+
+  // check whether orderID exists in the database. If exists, update isFulfilled field
+  const order = await Order.findByIdAndUpdate(
+    req.body.orderId,
+    {
+      $set: {
+        isCancelled: req.body.isCancelled,
+      },
+    },
+    { new: true }
+  );
+
+  if (!order)
+    return res.status(400).send("The order with the given ID was not found.");
+
+  res.send({
+    orderId: order._id,
+    isCancelled: order.isCancelled,
+  });
+};
+
 module.exports = {
   displayMenu,
   createOrder,
   getPastOrders,
   getActiveOrders,
+  setCancel,
 };

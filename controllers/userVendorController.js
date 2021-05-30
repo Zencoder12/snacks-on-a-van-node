@@ -67,6 +67,7 @@ const getActiveOrders = async (req, res) => {
   const orders = await Order.find({
     vendorName: vendor.vendorName,
     isFulfilled: false,
+    isReady: false,
   })
     .lean()
     .select("customerName orderItems orderTime");
@@ -142,26 +143,18 @@ setIsReady = async (req, res) => {
 
 // MARK ORDER AS FULFILLED
 setFulfill = async (req, res) => {
-  // check whether path URL vendorID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.vendorId))
-    return res.status(404).send("Not a valid vendor Id.");
-
-  // check whether path URL orderID is a valid mongo DB id object
-  if (!mongoose.Types.ObjectId.isValid(req.params.orderId))
-    return res.status(404).send("Not a valid order Id.");
-
   // validate req.body object
   const { error } = validateFulfillUpdate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   // check whether vendorID exists in the database
-  const vendor = await UserVendor.findById(req.params.vendorId);
+  const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
     return res.status(404).send("The vendor with the given ID was not found.");
 
   // check whether orderID exists in the database. If exists, update isFulfilled field
   const order = await Order.findByIdAndUpdate(
-    req.params.orderId,
+    req.body.orderId,
     {
       $set: {
         isFulfilled: req.body.isFulfilled,

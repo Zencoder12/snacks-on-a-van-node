@@ -6,6 +6,7 @@ const {
   createOrder,
   getPastOrders,
   getActiveOrders,
+  setCancel,
 } = require("../controllers/userCustomerController");
 
 // routes paths -> controllers
@@ -19,6 +20,9 @@ userCustomerRouter.get("/past-orders", authToken, (req, res) =>
 );
 userCustomerRouter.get("/active-orders", authToken, (req, res) =>
   getActiveOrders(req, res)
+);
+userCustomerRouter.patch("/cancel-order", authToken, (req, res) =>
+  setCancel(req, res)
 );
 
 module.exports = userCustomerRouter;

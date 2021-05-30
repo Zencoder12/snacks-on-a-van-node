@@ -48,6 +48,11 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  isCancelled: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 const Order = mongoose.model("Order", orderSchema);
@@ -63,6 +68,7 @@ function validateOrder(order) {
 
 function validateFulfillUpdate(order) {
   const orderSchema = Joi.object({
+    orderId: Joi.objectId().required(),
     isFulfilled: Joi.boolean().required(),
   });
 
@@ -78,7 +84,17 @@ function validateIsReadyUpdate(order) {
   return orderSchema.validate(order);
 }
 
+function validateSetCancel(order) {
+  const orderSchema = Joi.object({
+    orderId: Joi.objectId().required(),
+    isCancelled: Joi.boolean().required(),
+  });
+
+  return orderSchema.validate(order);
+}
+
 exports.Order = Order;
 exports.validateOrder = validateOrder;
 exports.validateFulfillUpdate = validateFulfillUpdate;
 exports.validateIsReadyUpdate = validateIsReadyUpdate;
+exports.validateSetCancel = validateSetCancel;

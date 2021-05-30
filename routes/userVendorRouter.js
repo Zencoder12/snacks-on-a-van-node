@@ -33,7 +33,7 @@ userVendorRouter.patch("/set-ready", authToken, (req, res) =>
   setIsReady(req, res)
 );
 
-userVendorRouter.patch("/:vendorId/:orderId/set-fulfill", (req, res) =>
+userVendorRouter.patch("/set-fulfill", authToken, (req, res) =>
   setFulfill(req, res)
 );
 
