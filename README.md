@@ -323,3 +323,7 @@ commitID: 90c18dd9775b1f20c46bad9f94df3897ac4dbaae
 
 - username: fleefuhuangl@student.unimelb.edu.au
 - password: info3005
+
+4. INFORMATION REGARDING THE MAP
+
+Map was implemented using the react-map-gl library which uses MAPBOX Api. The map was working fine on development enviroment (localhost), but unfortunately when pushed the heroku app it fails to render. We believe the issue might be in the way heroku creates the bundle.js and the render property might have been affected.
