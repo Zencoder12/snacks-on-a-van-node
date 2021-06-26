@@ -6,6 +6,7 @@ const {
   setLocation,
   getActiveOrders,
   getVendorsLocations,
+  getVendorLocation,
   getPastOrders,
   getReadyOrders,
   setFulfill,
@@ -18,9 +19,15 @@ userVendorRouter.post("/set-location", (req, res) => setLocation(req, res));
 userVendorRouter.get("/vendors-locations", (req, res) =>
   getVendorsLocations(req, res)
 );
+
+userVendorRouter.get("/vendor-location", authToken, (req, res) =>
+  getVendorLocation(req, res)
+);
+
 userVendorRouter.get("/active-orders", authToken, (req, res) =>
   getActiveOrders(req, res)
 );
+
 userVendorRouter.get("/past-orders", authToken, (req, res) =>
   getPastOrders(req, res)
 );

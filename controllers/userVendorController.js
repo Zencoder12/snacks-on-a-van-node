@@ -16,10 +16,10 @@ const setLocation = async (req, res) => {
   const { error } = validateVendorLocation(req.body);
   if (error) res.status(400).send(error.details[0].message);
 
-  const vendor = await VendorLocation.findOne({
+  const result = await VendorLocation.findOne({
     vendorName: req.body.vendorName,
   });
-  if (vendor)
+  if (result)
     return res
       .status(400)
       .send("The location for this vendor has already been set.");
@@ -53,6 +53,19 @@ const getVendorsLocations = async (req, res) => {
   const vendorLocations = await VendorLocation.find();
 
   res.send(vendorLocations);
+};
+
+// GET CURRENT VENDOR LOCATION
+const getVendorLocation = async (req, res) => {
+  const vendor = await UserVendor.findById(req.user._id);
+  if (!vendor)
+    return res.status(400).send("The vendor with the given ID was not found.");
+
+  const vendorLocation = await VendorLocation.findOne({
+    vendorName: req.user.vendorName,
+  }).lean();
+
+  res.send(vendorLocation);
 };
 
 // GET OUTSTANDING ORDERS
@@ -185,6 +198,7 @@ module.exports = {
   setLocation,
   getActiveOrders,
   getVendorsLocations,
+  getVendorLocation,
   getPastOrders,
   getReadyOrders,
   setFulfill,
