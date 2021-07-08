@@ -10,6 +10,12 @@ const {
   validateVendorLocation,
 } = require("../models/vendorLocation");
 
+/*
+Errors: 
+400 -> bad request. Body missing requirements. 
+404 -> resource not found in the server.
+*/
+
 // SET VAN LOCATION AND OPEN FOR BUSINESS
 const setLocation = async (req, res) => {
   // validate req.body object
@@ -42,8 +48,10 @@ const setLocation = async (req, res) => {
 // SET VAN STATUS NOT OPEN FOR BUSINESS
 const closeLocation = async (req, res) => {
   const vendorLocation = await VendorLocation.findOneAndDelete({
-    vendorName: req.body.vendorName,
+    vendorName: req.user.vendorName,
   });
+
+  if (!vendorLocation) return res.send("The current user has no set location.");
 
   res.send(vendorLocation);
 };
@@ -59,7 +67,7 @@ const getVendorsLocations = async (req, res) => {
 const getVendorLocation = async (req, res) => {
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(400).send("The vendor with the given ID was not found.");
+    return res.status(404).send("The vendor with the given ID was not found.");
 
   const vendorLocation = await VendorLocation.findOne({
     vendorName: req.user.vendorName,
@@ -73,7 +81,7 @@ const getActiveOrders = async (req, res) => {
   // check whether vendorID exists in the database
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(400).send("The vendor with the given ID was not found.");
+    return res.status(404).send("The vendor with the given ID was not found.");
 
   // retrieve all vendor's orders and filter the ones which isFulfilled is marked as false
   // if outstanding orders exists, send back to the client
@@ -81,9 +89,7 @@ const getActiveOrders = async (req, res) => {
     vendorName: vendor.vendorName,
     isFulfilled: false,
     isReady: false,
-  })
-    .lean()
-    .select("customerName orderItems orderTime");
+  }).lean();
 
   res.send(orders);
 };
@@ -93,16 +99,14 @@ const getReadyOrders = async (req, res) => {
   // check whether vendorID exists in the database
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(400).send("The vendor with the given ID was not found.");
+    return res.status(404).send("The vendor with the given ID was not found.");
 
   // retrieve all vendor's orders and filter the ones which are ready for customer pick-up
   const orders = await Order.find({
     vendorName: vendor.vendorName,
     isFulfilled: false,
     isReady: true,
-  })
-    .lean()
-    .select("customerName orderItems orderTime");
+  }).lean();
 
   res.send(orders);
 };
@@ -112,7 +116,7 @@ const getPastOrders = async (req, res) => {
   // check whether vendorID exists in the database
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(400).send("The vendor with the given ID was not found.");
+    return res.status(404).send("The vendor with the given ID was not found.");
 
   // if order exists and is fulfilled, send back to the client
   const orders = await Order.find({
@@ -147,7 +151,7 @@ setIsReady = async (req, res) => {
   );
 
   if (!order)
-    return res.status(400).send("The order with the given ID was not found.");
+    return res.status(404).send("The order with the given ID was not found.");
 
   res.send({
     orderId: order._id,
@@ -165,7 +169,7 @@ setFulfill = async (req, res) => {
   // check whether vendorID exists in the database
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(400).send("The vendor with the given ID was not found.");
+    return res.status(404).send("The vendor with the given ID was not found.");
 
   // check whether orderID exists in the database. If exists, update isFulfilled field
   const order = await Order.findByIdAndUpdate(
@@ -179,7 +183,7 @@ setFulfill = async (req, res) => {
   );
 
   if (!order)
-    return res.status(400).send("The order with the given ID was not found.");
+    return res.status(404).send("The order with the given ID was not found.");
 
   res.send({
     orderId: order._id,
@@ -190,7 +194,7 @@ setFulfill = async (req, res) => {
 updateProfile = async (req, res) => {
   const vendor = await UserVendor.findById(req.user._id);
   if (!vendor)
-    return res.status(400).send("The vendor with the given ID was not found.");
+    return res.status(404).send("The vendor with the given ID was not found.");
 };
 
 module.exports = {

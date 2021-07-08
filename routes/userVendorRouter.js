@@ -44,7 +44,7 @@ userVendorRouter.patch("/set-fulfill", authToken, (req, res) =>
   setFulfill(req, res)
 );
 
-userVendorRouter.delete("/close-location", (req, res) =>
+userVendorRouter.delete("/close-location", authToken, (req, res) =>
   closeLocation(req, res)
 );
 

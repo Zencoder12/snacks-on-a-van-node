@@ -13,6 +13,12 @@ const {
 } = require("../models/order");
 const bcrypt = require("bcrypt");
 
+/*
+Errors: 
+400 -> bad request. Body missing requirements. 
+404 -> resource not found in the server.
+*/
+
 // GET ALL PRODUCTS IN THE MENU
 const displayMenu = async (req, res) => {
   const products = await Product.find().lean();
@@ -25,20 +31,19 @@ const displayMenu = async (req, res) => {
 
 // ROUTE FOR CUSTOMER TO START A NEW ORDER
 const createOrder = async (req, res) => {
-  // validate req.body object
   const { error } = validateOrder(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  // check whether customerID exists in the database
+  // check whether customerID exists in the database.
   const customer = await UserCustomer.findById(req.user._id);
   if (!customer)
     return res
-      .status(400)
+      .status(404)
       .send("The customer with the given ID was not found.");
 
   // check whether vendorID provided in req.body exists in the database
   const vendor = await UserVendor.findOne({ vendorName: req.body.vendorName });
-  if (!vendor) return res.status(400).send("The vendor was not found.");
+  if (!vendor) return res.status(404).send("The vendor was not found.");
 
   // after all validations, create new order and return to the client
   let order = new Order({
@@ -63,7 +68,7 @@ const updateOrder = async (req, res) => {
   const customer = await UserCustomer.findById(req.user._id);
   if (!customer)
     return res
-      .status(400)
+      .status(404)
       .send("The customer with the given ID was not found.");
 
   const order = await Order.findByIdAndUpdate(
@@ -78,7 +83,7 @@ const updateOrder = async (req, res) => {
   );
 
   if (!order)
-    return res.status(400).send("The order with the given ID was not found.");
+    return res.status(404).send("The order with the given ID was not found.");
 
   res.send(order);
 };
@@ -91,7 +96,7 @@ const getPastOrders = async (req, res) => {
   });
   if (!customer)
     return res
-      .status(400)
+      .status(404)
       .send("The customer with the given ID was not found.");
 
   // retrieve previous customer's orders
@@ -111,7 +116,7 @@ const getActiveOrders = async (req, res) => {
   });
   if (!customer)
     return res
-      .status(400)
+      .status(404)
       .send("The customer with the given ID was not found.");
 
   // retrieve active customer's orders
@@ -153,7 +158,7 @@ const setCancel = async (req, res) => {
   });
   if (!customer)
     return res
-      .status(400)
+      .status(404)
       .send("The customer with the given ID was not found.");
 
   // check whether orderID exists in the database. If exists, update isFulfilled field
@@ -169,7 +174,7 @@ const setCancel = async (req, res) => {
   );
 
   if (!order)
-    return res.status(400).send("The order with the given ID was not found.");
+    return res.status(404).send("The order with the given ID was not found.");
 
   res.send({
     orderId: order._id,
@@ -188,7 +193,7 @@ const updateProfile = async (req, res) => {
   });
   if (!customer)
     return res
-      .status(400)
+      .status(404)
       .send("The customer with the given ID was not found.");
 
   const salt = await bcrypt.genSalt(10);

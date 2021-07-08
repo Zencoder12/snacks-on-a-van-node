@@ -5,15 +5,21 @@ const {
   validateUserCustomer,
 } = require("../models/userCustomer");
 
+/*
+Errors: 
+400 -> bad request. Body missing requirements. 
+404 -> resource not found in the server.
+*/
+
 const login = async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await UserCustomer.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send("Invalid email or password.");
+  if (!user) return res.status(404).send("Invalid email or password.");
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!validPassword) return res.status(400).send("Invalid email or password.");
+  if (!validPassword) return res.status(404).send("Invalid email or password.");
 
   const token = user.generateAuthToken();
   res.send(token);
@@ -28,7 +34,7 @@ const signUp = async (req, res) => {
   let user = await UserCustomer.findOne({ email: req.body.email });
   if (user)
     return res
-      .status(400)
+      .status(404)
       .send("User already registered. Please use another email.");
 
   // after performed all validations, create new customer and save

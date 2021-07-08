@@ -55,6 +55,20 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
+// encapsulated function to generate jwt token
+userCustomerSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    {
+      _id: this._id,
+      firstName: this.firstName,
+      email: this.email,
+      isCustomer: this.isCustomer,
+    },
+    config.get("jwtPrivateKey")
+  );
+  return token;
+};
+
 const Order = mongoose.model("Order", orderSchema);
 
 function validateOrder(order) {

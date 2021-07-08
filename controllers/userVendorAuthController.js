@@ -2,16 +2,22 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const { UserVendor, validateUserVendor } = require("../models/userVendor");
 
+/*
+Errors: 
+400 -> bad request. Body missing requirements. 
+404 -> resource not found in the server.
+*/
+
 const login = async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await UserVendor.findOne({ vendorName: req.body.vendorName });
-  if (!user) return res.status(400).send("Invalid van name or password.");
+  if (!user) return res.status(404).send("Invalid van name or password.");
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword)
-    return res.status(400).send("Invalid van name or password.");
+    return res.status(404).send("Invalid van name or password.");
 
   const token = user.generateAuthToken();
   res.send(token);
@@ -26,7 +32,7 @@ const signUp = async (req, res) => {
   let user = await UserVendor.findOne({ email: req.body.email });
   if (user)
     return res
-      .status(400)
+      .status(404)
       .send("User already registered. Please use another email.");
 
   // after performed all validations, create new customer and save
