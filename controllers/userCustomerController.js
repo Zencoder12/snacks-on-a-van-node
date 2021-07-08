@@ -108,7 +108,7 @@ const getPastOrders = async (req, res) => {
   const orders = await Order.find({
     customerEmail: customer.email,
     isFulfilled: true,
-  }).select("orderItems orderTime _id");
+  }).lean();
 
   res.send(orders);
 };
