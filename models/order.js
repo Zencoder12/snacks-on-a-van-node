@@ -3,6 +3,12 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
 const orderSchema = new mongoose.Schema({
+  invoice: {
+    type: String,
+    minlength: 3,
+    maxlength: 255,
+    required: true,
+  },
   customerName: {
     type: String,
     minlength: 3,
@@ -55,18 +61,21 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-// encapsulated function to generate jwt token
-userCustomerSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign(
-    {
-      _id: this._id,
-      firstName: this.firstName,
-      email: this.email,
-      isCustomer: this.isCustomer,
-    },
-    config.get("jwtPrivateKey")
-  );
-  return token;
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+// encapsulated function to generate invoice Id
+orderSchema.methods.generateInvoiceNumber = function (vendorName) {
+  const prefix = vendorName.substring(0, 3).toUpperCase();
+
+  const suffix1 = getRandomInt(0, 100).toString();
+
+  const d = new Date();
+
+  return prefix + "-" + d.getDate() + d.getMonth() + d.getFullYear() + suffix1;
 };
 
 const Order = mongoose.model("Order", orderSchema);

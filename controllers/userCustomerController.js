@@ -45,13 +45,18 @@ const createOrder = async (req, res) => {
   const vendor = await UserVendor.findOne({ vendorName: req.body.vendorName });
   if (!vendor) return res.status(404).send("The vendor was not found.");
 
+  // create an invoice number
+
   // after all validations, create new order and return to the client
   let order = new Order({
+    invoice: "",
     customerName: customer.firstName,
     customerEmail: customer.email,
     vendorName: vendor.vendorName,
     orderItems: req.body.orderItems,
   });
+
+  order.invoice = order.generateInvoiceNumber(vendor.vendorName);
 
   order = await order.save();
 
@@ -123,7 +128,7 @@ const getActiveOrders = async (req, res) => {
   const orders = await Order.find({
     customerEmail: customer.email,
     isFulfilled: false,
-  }).select("orderItems orderTime _id");
+  }).lean();
 
   res.send(orders);
 };
