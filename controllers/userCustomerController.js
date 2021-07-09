@@ -217,7 +217,9 @@ const updateProfile = async (req, res) => {
     { new: true }
   );
 
-  res.send({ user });
+  const token = user.generateAuthToken();
+
+  res.send({ token });
 };
 
 module.exports = {
