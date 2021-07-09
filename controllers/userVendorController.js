@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const { UserVendor } = require("../models/userVendor");
 const {
   Order,
